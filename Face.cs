@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Faces
 {
@@ -31,6 +32,7 @@ namespace Faces
             setReceiver();
 
             tiltedReciever = new PointF(receiver.X + horizontalTilt, receiver.Y + verticalTilt);
+            simplifyTiltedReciever();
         }
 
         //Creating a face with an angle from a center point, to a point:
@@ -42,6 +44,7 @@ namespace Faces
 
             horizontalTilt = lightPoint.X - receiver.X;
             verticalTilt = lightPoint.Y - receiver.Y;
+            simplifyTiltedReciever();
         }
         void setReceiver()
         {
@@ -59,6 +62,24 @@ namespace Faces
             receiver.Y /= points.Count;
         }
 
+        void simplifyTiltedReciever()
+        {
+            //Moves the point as close into the center of the face as possible!
+            float deltaX = tiltedReciever.X - receiver.X;
+            float deltaY = tiltedReciever.Y - receiver.Y;
+
+            float largerDelta = (deltaX < deltaY) ? deltaX : deltaY;
+            largerDelta = (largerDelta == 0) ? (float)0.01 : largerDelta;
+
+            deltaX /= Math.Abs(largerDelta);
+            deltaY /= Math.Abs(largerDelta);
+
+            tiltedReciever.X = receiver.X + deltaX;
+            tiltedReciever.Y = receiver.Y + deltaY;
+
+            horizontalTilt = receiver.X - tiltedReciever.X;
+            verticalTilt = receiver.Y - tiltedReciever.Y;
+        }
         #endregion
 
         #region Methods
@@ -73,18 +94,58 @@ namespace Faces
 
             return (float)((lightRecieverDistance - lightTiltDistance) / recieverTiltDistance);
         }
-        public float lightValue(List<PointF> lights)
+        public Color colorValue(List<Light> lights)
         {
-            if (receiver == tiltedReciever) { return 0; }
-            float maximumBrightness = 0;
+            if (lights.Count <= 0) { return Color.Black; }
+
+            List<int> rList = new List<int>();
+            List<int> gList = new List<int>();
+            List<int> bList = new List<int>();
 
             //For each point in the list, how bright would the face be? 
-            foreach (PointF l in lights)
-            { }
+            foreach (Light l in lights)
+            {
+                float lightVal = lightValue(l.position);
 
+                int r = l.color.R;
+                int b = l.color.B;
+                int g = l.color.G; 
+
+                //R
+                int newR = (int)(r / 2 * lightVal);
+                newR += (r / 2);
+                newR = (newR > 255) ? 255 : newR;
+                newR = (newR < 0) ? 0 : newR;
+
+                rList.Add(newR);
+
+                //G
+                int newG = (int)(g / 2 * lightVal);
+                newG += (g / 2);
+                newG = (newG > 255) ? 255 : newG;
+                newG = (newG < 0) ? 0 : newG;
+
+                gList.Add(newG);
+
+                //B
+                int newB = (int)(b / 2 * lightVal);
+                newB += (b / 2);
+                newB = (newB > 255) ? 255 : newB;
+                newB = (newB < 0) ? 0 : newB;
+
+                bList.Add(newB);
+            }
+
+            rList.Sort();
+            gList.Sort();
+            bList.Sort();
+
+            rList.Reverse();
+            gList.Reverse();
+            bList.Reverse();
 
             //Take only the brightest value, and return it.
-            return maximumBrightness;
+            return Color.FromArgb(rList[0], gList[0], bList[0]);
         }
         #endregion
 
