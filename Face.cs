@@ -20,11 +20,13 @@ namespace Faces
         //The point which recieves light
         public PointF receiver;
         public PointF tiltedReciever;
+
+        public Color initialColor;
         #endregion
 
         #region Construction
         //Creating a face with a known angle:
-        public Face(List<PointF> _points, float _horizontalTilt, float _verticalTilt)
+        public Face(List<PointF> _points, float _horizontalTilt, float _verticalTilt, Color _initialColor)
         {
             points = _points;
             horizontalTilt = _horizontalTilt;
@@ -33,10 +35,11 @@ namespace Faces
 
             tiltedReciever = new PointF(receiver.X + horizontalTilt, receiver.Y + verticalTilt);
             simplifyTiltedReciever();
+            initialColor = _initialColor;
         }
 
         //Creating a face with an angle from a center point, to a point:
-        public Face(List<PointF> _points, PointF lightPoint)
+        public Face(List<PointF> _points, PointF lightPoint, Color _initialColor)
         {
             points = _points;
             setReceiver();
@@ -45,6 +48,7 @@ namespace Faces
             horizontalTilt = lightPoint.X - receiver.X;
             verticalTilt = lightPoint.Y - receiver.Y;
             simplifyTiltedReciever();
+            initialColor = _initialColor;
         }
         void setReceiver()
         {
@@ -107,13 +111,14 @@ namespace Faces
             {
                 float lightVal = lightValue(l.position);
 
-                int r = l.color.R;
-                int b = l.color.B;
-                int g = l.color.G; 
+                int r = (l.color.R / 2 + initialColor.R / 2) - (255 - l.color.R);
+                int g = (l.color.G / 2 + initialColor.G / 2) - (255 - l.color.G);
+                int b = (l.color.B / 2 + initialColor.B / 2 ) - (255 - l.color.B); 
 
                 //R
                 int newR = (int)(r / 2 * lightVal);
                 newR += (r / 2);
+
                 newR = (newR > 255) ? 255 : newR;
                 newR = (newR < 0) ? 0 : newR;
 
@@ -122,6 +127,7 @@ namespace Faces
                 //G
                 int newG = (int)(g / 2 * lightVal);
                 newG += (g / 2);
+
                 newG = (newG > 255) ? 255 : newG;
                 newG = (newG < 0) ? 0 : newG;
 
@@ -130,6 +136,7 @@ namespace Faces
                 //B
                 int newB = (int)(b / 2 * lightVal);
                 newB += (b / 2);
+
                 newB = (newB > 255) ? 255 : newB;
                 newB = (newB < 0) ? 0 : newB;
 
@@ -145,7 +152,7 @@ namespace Faces
             bList.Reverse();
 
             //Take only the brightest value, and return it.
-            return Color.FromArgb(rList[0], gList[0], bList[0]);
+            return Color.FromArgb(255,rList[0], gList[0], bList[0]);
         }
         #endregion
 
