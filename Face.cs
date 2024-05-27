@@ -111,9 +111,9 @@ namespace Faces
             {
                 float lightVal = lightValue(l.position);
 
-                int r = (l.color.R / 2 + initialColor.R / 2) - (255 - l.color.R);
-                int g = (l.color.G / 2 + initialColor.G / 2) - (255 - l.color.G);
-                int b = (l.color.B / 2 + initialColor.B / 2 ) - (255 - l.color.B); 
+                int r = (initialColor.R) - (255 - l.color.R);
+                int g = (initialColor.G) - (255 - l.color.G);
+                int b = (initialColor.B) - (255 - l.color.B); 
 
                 //R
                 int newR = (int)(r / 2 * lightVal);
@@ -152,7 +152,7 @@ namespace Faces
             bList.Reverse();
 
             //Take only the brightest value, and return it.
-            return Color.FromArgb(255,rList[0], gList[0], bList[0]);
+            return Color.FromArgb(initialColor.A,rList[0], gList[0], bList[0]);
         }
         #endregion
 

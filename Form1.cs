@@ -26,6 +26,7 @@ namespace Faces
         public Form1()
         {
             InitializeComponent();
+            ChangeScreen(this, new MenuScreen());
             primaryLights.Add(new Light(Color.FromArgb(255, 150, 200, 10), cursorPos));
         }
 
@@ -37,10 +38,10 @@ namespace Faces
             cursorPos = PointToClient(Cursor.Position);
             primaryLights[0] = new Light(cursorColor, cursorPos);
 
-            foreach(Face f in faces) 
+            foreach (Face f in faces)
             {
                 Color color = f.colorValue(primaryLights);
-                secondaryLights.Add(new Light(color,new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
+                secondaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
             }
 
             lights.AddRange(primaryLights);
@@ -65,14 +66,6 @@ namespace Faces
             {
                 Color color = f.colorValue(lights);
                 e.Graphics.FillPolygon(new SolidBrush(color), f.points.ToArray());
-            }
-
-            label1.Text = "";
-            foreach (Light l in primaryLights)
-            {
-                e.Graphics.FillEllipse(new SolidBrush(l.color), new RectangleF(l.position.X - 2, l.position.Y - 2, 4, 4));
-
-                label1.Text += $"R:{l.color.R}G:{l.color.G}B:{l.color.B}\n";
             }
         }
 
@@ -138,7 +131,7 @@ namespace Faces
                     int tiltLine = s + (pointCount * 2) + 2;
                     PointF tiltPoint = new PointF((float)Convert.ToDouble(file[tiltLine + 2]), (float)Convert.ToDouble(file[tiltLine + 3]));
 
-                    faces.Add(new Face(_points, tiltPoint, Color.Gray));
+                    faces.Add(new Face(_points, tiltPoint, Color.Red));
                 }
             }
         }
@@ -167,6 +160,35 @@ namespace Faces
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+        }
+        public static void ChangeScreen(object sender, UserControl next)
+        {
+
+            Form f; // will either be the sender or parent of sender 
+
+            if (sender is Form)
+            {
+                f = (Form)sender;
+            }
+            else
+            {
+                UserControl current = (UserControl)sender;
+                f = current.FindForm();
+                f.Controls.Remove(current);
+            }
+
+            next.Location = new Point((f.ClientSize.Width - next.Width) / 2, (f.ClientSize.Height - next.Height) / 2);
+            f.Controls.Add(next);
+
+            next.Focus();
         }
     }
 }
