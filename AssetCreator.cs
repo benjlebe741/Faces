@@ -16,6 +16,7 @@ namespace Faces
     {
         int currentAsset = 0;
         bool lighting = false;
+        bool surfaceLights = true;
         List<Face> faces = new List<Face>();
 
         //Lighting 
@@ -32,6 +33,11 @@ namespace Faces
         Color cursorColor = Color.White;
         Color determineColor = Color.White;
 
+        //What way are you adding polygons
+        string createMode = "Polygons";
+        PointF cornerOne = new PointF();
+        PointF cornerTwo = new PointF();
+
         public AssetCreator()
         {
             InitializeComponent();
@@ -41,10 +47,10 @@ namespace Faces
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            cursorPos = PointToClient(Cursor.Position);
             currentAssetLabel.Text = "" + currentAsset;
 
             determineNextColor();
-
             currentColor.BackColor = cursorColor;
             nextColor.BackColor = determineColor;
 
@@ -59,17 +65,19 @@ namespace Faces
                 secondaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
             }
 
-            cursorPos = PointToClient(Cursor.Position);
             primaryLights[0] = new Light(cursorColor, cursorPos);
 
-            lights.AddRange(secondaryLights);
-            foreach (Face f in faces)
+            if (surfaceLights)
             {
-                Color color = f.colorValue(lights);
-                tertiaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
-            }
+                lights.AddRange(secondaryLights);
+                foreach (Face f in faces)
+                {
+                    Color color = f.colorValue(lights);
+                    tertiaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
+                }
 
-            lights.AddRange(tertiaryLights);
+                lights.AddRange(tertiaryLights);
+            }
             Refresh();
         }
 
@@ -120,7 +128,10 @@ namespace Faces
 
         private void AssetCreator_MouseClick(object sender, MouseEventArgs e)
         {
-            points.Add(cursorPos);
+            if (createMode == "Polygons")
+            {
+                points.Add(cursorPos);
+            }
         }
 
         private void AssetCreator_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -295,6 +306,46 @@ namespace Faces
         private void currentAssetLabel_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void PolygoneMode_Click(object sender, EventArgs e)
+        {
+            createMode = "Polygons";
+            PolygoneMode.BackColor = Color.White;
+            RectangleMode.BackColor = Color.LightGray;
+        }
+
+        private void RectangleMode_Click(object sender, EventArgs e)
+        {
+            createMode = "Rectangles";
+            RectangleMode.BackColor = Color.White;
+            PolygoneMode.BackColor = Color.LightGray;
+        }
+
+        private void AssetCreator_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (createMode == "Rectangles")
+            {
+                cornerTwo = cursorPos;
+                points.Add(cornerOne);
+                points.Add(new PointF(cornerOne.X, cornerTwo.Y));
+                points.Add(cornerTwo);
+                points.Add(new PointF(cornerTwo.X, cornerOne.Y));
+            }
+        }
+
+        private void AssetCreator_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (createMode == "Rectangles")
+            {
+                cornerOne = cursorPos;
+            }
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            surfaceLights = !surfaceLights;
+            label3.BackColor = (surfaceLights) ? Color.White : Color.LightGray;
         }
     }
 }

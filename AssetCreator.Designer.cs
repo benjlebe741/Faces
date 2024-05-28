@@ -37,6 +37,9 @@
             this.saveLabel = new System.Windows.Forms.Label();
             this.loadLabel = new System.Windows.Forms.Label();
             this.currentAssetLabel = new System.Windows.Forms.Label();
+            this.PolygoneMode = new System.Windows.Forms.Label();
+            this.RectangleMode = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // timer1
@@ -61,7 +64,7 @@
             this.label2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.label2.Location = new System.Drawing.Point(252, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(127, 52);
+            this.label2.Size = new System.Drawing.Size(98, 52);
             this.label2.TabIndex = 8;
             this.label2.Text = "Toggle Lights";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -120,11 +123,47 @@
             this.currentAssetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.currentAssetLabel.Click += new System.EventHandler(this.currentAssetLabel_Click);
             // 
+            // PolygoneMode
+            // 
+            this.PolygoneMode.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.PolygoneMode.Location = new System.Drawing.Point(3, 64);
+            this.PolygoneMode.Name = "PolygoneMode";
+            this.PolygoneMode.Size = new System.Drawing.Size(97, 52);
+            this.PolygoneMode.TabIndex = 15;
+            this.PolygoneMode.Text = "Polygon Mode";
+            this.PolygoneMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.PolygoneMode.Click += new System.EventHandler(this.PolygoneMode_Click);
+            // 
+            // RectangleMode
+            // 
+            this.RectangleMode.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.RectangleMode.Location = new System.Drawing.Point(3, 125);
+            this.RectangleMode.Name = "RectangleMode";
+            this.RectangleMode.Size = new System.Drawing.Size(97, 52);
+            this.RectangleMode.TabIndex = 16;
+            this.RectangleMode.Text = "Rectangle Mode";
+            this.RectangleMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.RectangleMode.Click += new System.EventHandler(this.RectangleMode_Click);
+            // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label3.Location = new System.Drawing.Point(356, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(106, 52);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Surface Lights (Frame Drops)";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
             // AssetCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.RectangleMode);
+            this.Controls.Add(this.PolygoneMode);
             this.Controls.Add(this.currentAssetLabel);
             this.Controls.Add(this.loadLabel);
             this.Controls.Add(this.saveLabel);
@@ -138,6 +177,8 @@
             this.Load += new System.EventHandler(this.AssetCreator_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.AssetCreator_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.AssetCreator_MouseClick);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AssetCreator_MouseDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AssetCreator_MouseUp);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AssetCreator_PreviewKeyDown);
             this.ResumeLayout(false);
 
@@ -152,5 +193,8 @@
         private System.Windows.Forms.Label saveLabel;
         private System.Windows.Forms.Label loadLabel;
         private System.Windows.Forms.Label currentAssetLabel;
+        private System.Windows.Forms.Label PolygoneMode;
+        private System.Windows.Forms.Label RectangleMode;
+        private System.Windows.Forms.Label label3;
     }
 }
