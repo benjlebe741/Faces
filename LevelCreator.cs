@@ -272,5 +272,20 @@ namespace Faces
                 e.Graphics.FillEllipse(brush, new Rectangle((int)p.X - 4, (int)p.Y - 4, 8, 8));
             }
         }
+
+        private void regionBackground_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void regionMidground_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void regionForeground_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -46,6 +46,12 @@
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.scaleLabel6 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.regionBackground = new System.Windows.Forms.Label();
+            this.regionForeground = new System.Windows.Forms.Label();
+            this.regionMidground = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // SurfaceLightsToggle
@@ -227,11 +233,80 @@
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
+            // regionBackground
+            // 
+            this.regionBackground.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.regionBackground.Location = new System.Drawing.Point(3, 265);
+            this.regionBackground.Name = "regionBackground";
+            this.regionBackground.Size = new System.Drawing.Size(97, 24);
+            this.regionBackground.TabIndex = 36;
+            this.regionBackground.Text = "Background";
+            this.regionBackground.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regionBackground.Click += new System.EventHandler(this.regionBackground_Click);
+            // 
+            // regionForeground
+            // 
+            this.regionForeground.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.regionForeground.Location = new System.Drawing.Point(3, 327);
+            this.regionForeground.Name = "regionForeground";
+            this.regionForeground.Size = new System.Drawing.Size(97, 24);
+            this.regionForeground.TabIndex = 37;
+            this.regionForeground.Text = "Foreground";
+            this.regionForeground.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regionForeground.Click += new System.EventHandler(this.regionForeground_Click);
+            // 
+            // regionMidground
+            // 
+            this.regionMidground.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.regionMidground.Location = new System.Drawing.Point(3, 296);
+            this.regionMidground.Name = "regionMidground";
+            this.regionMidground.Size = new System.Drawing.Size(97, 24);
+            this.regionMidground.TabIndex = 38;
+            this.regionMidground.Text = "Middleground";
+            this.regionMidground.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regionMidground.Click += new System.EventHandler(this.regionMidground_Click);
+            // 
+            // label5
+            // 
+            this.label5.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.label5.Location = new System.Drawing.Point(3, 376);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(54, 24);
+            this.label5.TabIndex = 39;
+            this.label5.Text = "Lights";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.label6.Location = new System.Drawing.Point(3, 407);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 24);
+            this.label6.TabIndex = 40;
+            this.label6.Text = "Art";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label7
+            // 
+            this.label7.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.label7.Location = new System.Drawing.Point(3, 438);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(65, 24);
+            this.label7.TabIndex = 41;
+            this.label7.Text = "Collision";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // LevelCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.regionMidground);
+            this.Controls.Add(this.regionForeground);
+            this.Controls.Add(this.regionBackground);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.scaleLabel6);
             this.Controls.Add(this.SelectMode);
@@ -275,5 +350,11 @@
         private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Label scaleLabel6;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label regionBackground;
+        private System.Windows.Forms.Label regionForeground;
+        private System.Windows.Forms.Label regionMidground;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }
