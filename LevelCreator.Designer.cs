@@ -49,9 +49,12 @@
             this.regionBackground = new System.Windows.Forms.Label();
             this.regionForeground = new System.Windows.Forms.Label();
             this.regionMidground = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.regionCollisions = new System.Windows.Forms.Label();
+            this.regionArt = new System.Windows.Forms.Label();
+            this.describeCurrent = new System.Windows.Forms.Label();
+            this.currentLevelLabel = new System.Windows.Forms.Label();
+            this.loadLevel = new System.Windows.Forms.Label();
+            this.saveLevel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // SurfaceLightsToggle
@@ -90,10 +93,10 @@
             // currentAssetLabel
             // 
             this.currentAssetLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.currentAssetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentAssetLabel.Location = new System.Drawing.Point(676, 3);
+            this.currentAssetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.currentAssetLabel.Location = new System.Drawing.Point(676, 32);
             this.currentAssetLabel.Name = "currentAssetLabel";
-            this.currentAssetLabel.Size = new System.Drawing.Size(82, 52);
+            this.currentAssetLabel.Size = new System.Drawing.Size(82, 25);
             this.currentAssetLabel.TabIndex = 23;
             this.currentAssetLabel.Text = "0";
             this.currentAssetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -101,9 +104,9 @@
             // loadLabel
             // 
             this.loadLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.loadLabel.Location = new System.Drawing.Point(764, 3);
+            this.loadLabel.Location = new System.Drawing.Point(764, 32);
             this.loadLabel.Name = "loadLabel";
-            this.loadLabel.Size = new System.Drawing.Size(93, 52);
+            this.loadLabel.Size = new System.Drawing.Size(93, 25);
             this.loadLabel.TabIndex = 22;
             this.loadLabel.Text = "Load Asset";
             this.loadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -143,9 +146,9 @@
             // 
             this.scaleLabel1.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel1.Location = new System.Drawing.Point(989, 58);
+            this.scaleLabel1.Location = new System.Drawing.Point(985, 151);
             this.scaleLabel1.Name = "scaleLabel1";
-            this.scaleLabel1.Size = new System.Drawing.Size(114, 23);
+            this.scaleLabel1.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel1.TabIndex = 28;
             this.scaleLabel1.Text = "r: set red";
             this.scaleLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -154,9 +157,9 @@
             // 
             this.scaleLabel2.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel2.Location = new System.Drawing.Point(989, 87);
+            this.scaleLabel2.Location = new System.Drawing.Point(985, 180);
             this.scaleLabel2.Name = "scaleLabel2";
-            this.scaleLabel2.Size = new System.Drawing.Size(114, 23);
+            this.scaleLabel2.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel2.TabIndex = 29;
             this.scaleLabel2.Text = "g: set green";
             this.scaleLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -165,9 +168,9 @@
             // 
             this.scaleLabel3.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel3.Location = new System.Drawing.Point(989, 116);
+            this.scaleLabel3.Location = new System.Drawing.Point(985, 209);
             this.scaleLabel3.Name = "scaleLabel3";
-            this.scaleLabel3.Size = new System.Drawing.Size(114, 23);
+            this.scaleLabel3.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel3.TabIndex = 30;
             this.scaleLabel3.Text = "b: set blue";
             this.scaleLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -176,9 +179,9 @@
             // 
             this.scaleLabel4.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel4.Location = new System.Drawing.Point(989, 145);
+            this.scaleLabel4.Location = new System.Drawing.Point(985, 238);
             this.scaleLabel4.Name = "scaleLabel4";
-            this.scaleLabel4.Size = new System.Drawing.Size(114, 23);
+            this.scaleLabel4.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel4.TabIndex = 31;
             this.scaleLabel4.Text = "a: set \'a\'";
             this.scaleLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -187,9 +190,9 @@
             // 
             this.scaleLabel5.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel5.Location = new System.Drawing.Point(989, 175);
+            this.scaleLabel5.Location = new System.Drawing.Point(985, 268);
             this.scaleLabel5.Name = "scaleLabel5";
-            this.scaleLabel5.Size = new System.Drawing.Size(114, 23);
+            this.scaleLabel5.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel5.TabIndex = 32;
             this.scaleLabel5.Text = "s: scale";
             this.scaleLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -215,9 +218,9 @@
             // 
             this.scaleLabel6.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel6.Location = new System.Drawing.Point(989, 204);
+            this.scaleLabel6.Location = new System.Drawing.Point(985, 297);
             this.scaleLabel6.Name = "scaleLabel6";
-            this.scaleLabel6.Size = new System.Drawing.Size(114, 23);
+            this.scaleLabel6.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel6.TabIndex = 34;
             this.scaleLabel6.Text = "f: rotate";
             this.scaleLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -266,44 +269,83 @@
             this.regionMidground.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.regionMidground.Click += new System.EventHandler(this.regionMidground_Click);
             // 
-            // label5
+            // regionCollisions
             // 
-            this.label5.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.label5.Location = new System.Drawing.Point(3, 376);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(54, 24);
-            this.label5.TabIndex = 39;
-            this.label5.Text = "Lights";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regionCollisions.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.regionCollisions.Location = new System.Drawing.Point(3, 409);
+            this.regionCollisions.Name = "regionCollisions";
+            this.regionCollisions.Size = new System.Drawing.Size(65, 24);
+            this.regionCollisions.TabIndex = 41;
+            this.regionCollisions.Text = "Collision";
+            this.regionCollisions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regionCollisions.Click += new System.EventHandler(this.regionCollisions_Click);
             // 
-            // label6
+            // regionArt
             // 
-            this.label6.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.label6.Location = new System.Drawing.Point(3, 407);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 24);
-            this.label6.TabIndex = 40;
-            this.label6.Text = "Art";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regionArt.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.regionArt.Location = new System.Drawing.Point(3, 376);
+            this.regionArt.Name = "regionArt";
+            this.regionArt.Size = new System.Drawing.Size(54, 24);
+            this.regionArt.TabIndex = 42;
+            this.regionArt.Text = "Art";
+            this.regionArt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regionArt.Click += new System.EventHandler(this.regionArt_Click);
             // 
-            // label7
+            // describeCurrent
             // 
-            this.label7.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.label7.Location = new System.Drawing.Point(3, 438);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(65, 24);
-            this.label7.TabIndex = 41;
-            this.label7.Text = "Collision";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.describeCurrent.BackColor = System.Drawing.Color.RosyBrown;
+            this.describeCurrent.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.describeCurrent.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.describeCurrent.Location = new System.Drawing.Point(985, 59);
+            this.describeCurrent.Name = "describeCurrent";
+            this.describeCurrent.Size = new System.Drawing.Size(118, 86);
+            this.describeCurrent.TabIndex = 43;
+            this.describeCurrent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // currentLevelLabel
+            // 
+            this.currentLevelLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.currentLevelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.currentLevelLabel.Location = new System.Drawing.Point(574, 3);
+            this.currentLevelLabel.Name = "currentLevelLabel";
+            this.currentLevelLabel.Size = new System.Drawing.Size(82, 25);
+            this.currentLevelLabel.TabIndex = 45;
+            this.currentLevelLabel.Text = "0";
+            this.currentLevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // loadLevel
+            // 
+            this.loadLevel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.loadLevel.Location = new System.Drawing.Point(764, 3);
+            this.loadLevel.Name = "loadLevel";
+            this.loadLevel.Size = new System.Drawing.Size(93, 25);
+            this.loadLevel.TabIndex = 44;
+            this.loadLevel.Text = "Load Level";
+            this.loadLevel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.loadLevel.Click += new System.EventHandler(this.loadLevel_Click);
+            // 
+            // saveLevel
+            // 
+            this.saveLevel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.saveLevel.Location = new System.Drawing.Point(662, 3);
+            this.saveLevel.Name = "saveLevel";
+            this.saveLevel.Size = new System.Drawing.Size(96, 25);
+            this.saveLevel.TabIndex = 46;
+            this.saveLevel.Text = "Save Level";
+            this.saveLevel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.saveLevel.Click += new System.EventHandler(this.saveLevel_Click);
             // 
             // LevelCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.saveLevel);
+            this.Controls.Add(this.currentLevelLabel);
+            this.Controls.Add(this.loadLevel);
+            this.Controls.Add(this.describeCurrent);
+            this.Controls.Add(this.regionArt);
+            this.Controls.Add(this.regionCollisions);
             this.Controls.Add(this.regionMidground);
             this.Controls.Add(this.regionForeground);
             this.Controls.Add(this.regionBackground);
@@ -327,6 +369,8 @@
             this.Name = "LevelCreator";
             this.Size = new System.Drawing.Size(1106, 753);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.LevelCreator_Paint);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LevelCreator_MouseDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LevelCreator_MouseUp);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.LevelCreator_PreviewKeyDown);
             this.ResumeLayout(false);
 
@@ -353,8 +397,11 @@
         private System.Windows.Forms.Label regionBackground;
         private System.Windows.Forms.Label regionForeground;
         private System.Windows.Forms.Label regionMidground;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label regionCollisions;
+        private System.Windows.Forms.Label regionArt;
+        private System.Windows.Forms.Label describeCurrent;
+        private System.Windows.Forms.Label currentLevelLabel;
+        private System.Windows.Forms.Label loadLevel;
+        private System.Windows.Forms.Label saveLevel;
     }
 }

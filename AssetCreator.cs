@@ -281,8 +281,6 @@ namespace Faces
                     faces.Add(new Face(facePoints, new PointF(xTilt, yTilt), color));
                 }
             }
-
-
         }
 
         void checkAsset()
