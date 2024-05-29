@@ -55,12 +55,13 @@
             this.currentLevelLabel = new System.Windows.Forms.Label();
             this.loadLevel = new System.Windows.Forms.Label();
             this.saveLevel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // SurfaceLightsToggle
             // 
             this.SurfaceLightsToggle.BackColor = System.Drawing.Color.LightGray;
-            this.SurfaceLightsToggle.Location = new System.Drawing.Point(369, 3);
+            this.SurfaceLightsToggle.Location = new System.Drawing.Point(356, 3);
             this.SurfaceLightsToggle.Name = "SurfaceLightsToggle";
             this.SurfaceLightsToggle.Size = new System.Drawing.Size(106, 52);
             this.SurfaceLightsToggle.TabIndex = 26;
@@ -94,7 +95,7 @@
             // 
             this.currentAssetLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.currentAssetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentAssetLabel.Location = new System.Drawing.Point(676, 32);
+            this.currentAssetLabel.Location = new System.Drawing.Point(773, 32);
             this.currentAssetLabel.Name = "currentAssetLabel";
             this.currentAssetLabel.Size = new System.Drawing.Size(82, 25);
             this.currentAssetLabel.TabIndex = 23;
@@ -104,7 +105,7 @@
             // loadLabel
             // 
             this.loadLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.loadLabel.Location = new System.Drawing.Point(764, 32);
+            this.loadLabel.Location = new System.Drawing.Point(861, 32);
             this.loadLabel.Name = "loadLabel";
             this.loadLabel.Size = new System.Drawing.Size(93, 25);
             this.loadLabel.TabIndex = 22;
@@ -116,7 +117,7 @@
             // 
             this.currentColor.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.currentColor.ForeColor = System.Drawing.Color.DarkMagenta;
-            this.currentColor.Location = new System.Drawing.Point(863, 3);
+            this.currentColor.Location = new System.Drawing.Point(960, 3);
             this.currentColor.Name = "currentColor";
             this.currentColor.Size = new System.Drawing.Size(117, 52);
             this.currentColor.TabIndex = 20;
@@ -125,7 +126,7 @@
             // nextColor
             // 
             this.nextColor.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.nextColor.Location = new System.Drawing.Point(986, 3);
+            this.nextColor.Location = new System.Drawing.Point(1083, 3);
             this.nextColor.Name = "nextColor";
             this.nextColor.Size = new System.Drawing.Size(117, 52);
             this.nextColor.TabIndex = 19;
@@ -134,7 +135,7 @@
             // LightsToggle
             // 
             this.LightsToggle.BackColor = System.Drawing.Color.LightGray;
-            this.LightsToggle.Location = new System.Drawing.Point(265, 3);
+            this.LightsToggle.Location = new System.Drawing.Point(252, 3);
             this.LightsToggle.Name = "LightsToggle";
             this.LightsToggle.Size = new System.Drawing.Size(98, 52);
             this.LightsToggle.TabIndex = 18;
@@ -146,7 +147,7 @@
             // 
             this.scaleLabel1.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel1.Location = new System.Drawing.Point(985, 151);
+            this.scaleLabel1.Location = new System.Drawing.Point(1082, 151);
             this.scaleLabel1.Name = "scaleLabel1";
             this.scaleLabel1.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel1.TabIndex = 28;
@@ -157,7 +158,7 @@
             // 
             this.scaleLabel2.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel2.Location = new System.Drawing.Point(985, 180);
+            this.scaleLabel2.Location = new System.Drawing.Point(1082, 180);
             this.scaleLabel2.Name = "scaleLabel2";
             this.scaleLabel2.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel2.TabIndex = 29;
@@ -168,7 +169,7 @@
             // 
             this.scaleLabel3.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel3.Location = new System.Drawing.Point(985, 209);
+            this.scaleLabel3.Location = new System.Drawing.Point(1082, 209);
             this.scaleLabel3.Name = "scaleLabel3";
             this.scaleLabel3.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel3.TabIndex = 30;
@@ -179,7 +180,7 @@
             // 
             this.scaleLabel4.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel4.Location = new System.Drawing.Point(985, 238);
+            this.scaleLabel4.Location = new System.Drawing.Point(1082, 238);
             this.scaleLabel4.Name = "scaleLabel4";
             this.scaleLabel4.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel4.TabIndex = 31;
@@ -190,7 +191,7 @@
             // 
             this.scaleLabel5.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel5.Location = new System.Drawing.Point(985, 268);
+            this.scaleLabel5.Location = new System.Drawing.Point(1082, 268);
             this.scaleLabel5.Name = "scaleLabel5";
             this.scaleLabel5.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel5.TabIndex = 32;
@@ -218,7 +219,7 @@
             // 
             this.scaleLabel6.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel6.Location = new System.Drawing.Point(985, 297);
+            this.scaleLabel6.Location = new System.Drawing.Point(1082, 297);
             this.scaleLabel6.Name = "scaleLabel6";
             this.scaleLabel6.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel6.TabIndex = 34;
@@ -296,7 +297,7 @@
             this.describeCurrent.BackColor = System.Drawing.Color.RosyBrown;
             this.describeCurrent.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.describeCurrent.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.describeCurrent.Location = new System.Drawing.Point(985, 59);
+            this.describeCurrent.Location = new System.Drawing.Point(1082, 59);
             this.describeCurrent.Name = "describeCurrent";
             this.describeCurrent.Size = new System.Drawing.Size(118, 86);
             this.describeCurrent.TabIndex = 43;
@@ -306,7 +307,7 @@
             // 
             this.currentLevelLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.currentLevelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentLevelLabel.Location = new System.Drawing.Point(574, 3);
+            this.currentLevelLabel.Location = new System.Drawing.Point(671, 3);
             this.currentLevelLabel.Name = "currentLevelLabel";
             this.currentLevelLabel.Size = new System.Drawing.Size(82, 25);
             this.currentLevelLabel.TabIndex = 45;
@@ -316,7 +317,7 @@
             // loadLevel
             // 
             this.loadLevel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.loadLevel.Location = new System.Drawing.Point(764, 3);
+            this.loadLevel.Location = new System.Drawing.Point(861, 3);
             this.loadLevel.Name = "loadLevel";
             this.loadLevel.Size = new System.Drawing.Size(93, 25);
             this.loadLevel.TabIndex = 44;
@@ -327,7 +328,7 @@
             // saveLevel
             // 
             this.saveLevel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.saveLevel.Location = new System.Drawing.Point(662, 3);
+            this.saveLevel.Location = new System.Drawing.Point(759, 3);
             this.saveLevel.Name = "saveLevel";
             this.saveLevel.Size = new System.Drawing.Size(96, 25);
             this.saveLevel.TabIndex = 46;
@@ -335,11 +336,23 @@
             this.saveLevel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.saveLevel.Click += new System.EventHandler(this.saveLevel_Click);
             // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.LightGray;
+            this.label2.Location = new System.Drawing.Point(468, 3);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(92, 52);
+            this.label2.TabIndex = 47;
+            this.label2.Text = "Paralax";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
             // LevelCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.saveLevel);
             this.Controls.Add(this.currentLevelLabel);
             this.Controls.Add(this.loadLevel);
@@ -367,7 +380,7 @@
             this.Controls.Add(this.LightsToggle);
             this.DoubleBuffered = true;
             this.Name = "LevelCreator";
-            this.Size = new System.Drawing.Size(1106, 753);
+            this.Size = new System.Drawing.Size(1203, 833);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.LevelCreator_Paint);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LevelCreator_MouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LevelCreator_MouseUp);
@@ -403,5 +416,6 @@
         private System.Windows.Forms.Label currentLevelLabel;
         private System.Windows.Forms.Label loadLevel;
         private System.Windows.Forms.Label saveLevel;
+        private System.Windows.Forms.Label label2;
     }
 }

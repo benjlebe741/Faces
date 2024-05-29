@@ -33,6 +33,10 @@ namespace Faces
         bool lighting = false;
         bool surfaceLights = true;
 
+        //Paralaxing
+        PointF paralaxPoint = new PointF();
+        bool paralax = false;
+
         //Planes
         List<Plane> planes = new List<Plane> { new Plane(), new Plane(), new Plane() };
         int planeDepth = 1;
@@ -44,6 +48,7 @@ namespace Faces
             checkAsset();
             checKLevel();
             ModeCheck();
+            paralaxPoint = new PointF(this.Width / 2, this.Height / 2);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -156,6 +161,7 @@ namespace Faces
 
         private void LevelCreator_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            int moveSpeed = 8;
             switch (e.KeyCode)
             {
                 case Keys.Y:
@@ -191,6 +197,18 @@ namespace Faces
                     currentAsset--;
                     checkAsset();
                     checKLevel();
+                    break;
+                case Keys.E:
+                    paralaxPoint.Y -= moveSpeed;
+                    break;
+                case Keys.D:
+                    paralaxPoint.Y += moveSpeed;
+                    break;
+                case Keys.S:
+                    paralaxPoint.X -= moveSpeed;
+                    break;
+                case Keys.F:
+                    paralaxPoint.X += moveSpeed;
                     break;
             }
         }
@@ -234,16 +252,40 @@ namespace Faces
 
         private void LevelCreator_Paint(object sender, PaintEventArgs e)
         {
+            int posPlaneDepth = planes.Count;
+            int negPlaneDepth = 0;
+            int negParalaxDifference = 4 / planes.Count;
+            float posParalaxDifference = 3 / planes.Count;
             foreach (Plane plane in planes)
             {
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, 0, 0, 0)), new Rectangle(0, 0, this.Right, this.Bottom));
+                posPlaneDepth--;
+                negPlaneDepth++;
                 #region Shaded
                 //Fill the faces
                 if (lighting)
                 {
                     foreach (Face f in plane.faces)
                     {
+                        PointF[] points = f.points.ToArray();
+                        if (paralax)
+                        {
+                            for (int p = 0; p < points.Length; p++)
+                            {
+                                //PointF pp = new PointF(this.Width / 2,this.Height / 2);
+                                PointF pp = points[p];
+                                points[p].X -= (cursorPos.X - pp.X) / (negParalaxDifference * (negPlaneDepth + 1));
+                                points[p].Y -= (cursorPos.Y - pp.Y) / (negParalaxDifference * (negPlaneDepth + 1));
+
+                                points[p].X -= (paralaxPoint.X - this.Width / 2);
+                                points[p].Y -= (paralaxPoint.Y - this.Height / 2);
+                                //points[p].X -= (cursorPos.X - pp.X) / (posParalaxDifference * (posPlaneDepth + 1));
+                                //points[p].Y -= (cursorPos.Y - pp.Y) / (posParalaxDifference * (posPlaneDepth + 1));
+
+                            }
+                        }
                         Color color = f.colorValue(plane.lights);
-                        e.Graphics.FillPolygon(new SolidBrush(color), f.points.ToArray());
+                        e.Graphics.FillPolygon(new SolidBrush(color), points);
                     }
                     foreach (Light l in plane.lights)
                     {
@@ -425,7 +467,7 @@ namespace Faces
 
                     plane.AppendChild(face);
                 }
-                foreach (Light l in pl.primaryLights) 
+                foreach (Light l in pl.primaryLights)
                 {
                     XmlElement light = doc.CreateElement("Light");
                     light.SetAttribute("a", "" + l.color.A);
@@ -490,11 +532,17 @@ namespace Faces
                     {
                         Color color = Color.FromArgb(Convert.ToInt16(l.Attributes["a"].Value), Convert.ToInt16(l.Attributes["r"].Value), Convert.ToInt16(l.Attributes["g"].Value), Convert.ToInt16(l.Attributes["b"].Value));
                         PointF position = new PointF((float)Convert.ToDouble(l.Attributes["x"].Value), (float)Convert.ToDouble(l.Attributes["y"].Value));
-                        plane.primaryLights.Add(new Light(color,position));
+                        plane.primaryLights.Add(new Light(color, position));
                     }
                     planes.Add(plane);
                 }
             }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            paralax = !paralax;
+            label2.BackColor = (paralax) ? Color.White : Color.LightGray;
         }
     }
 }
