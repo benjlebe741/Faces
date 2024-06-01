@@ -34,7 +34,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(441, 92);
+            this.button2.Location = new System.Drawing.Point(477, 92);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(371, 162);
             this.button2.TabIndex = 4;
@@ -44,7 +44,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(64, 92);
+            this.button1.Location = new System.Drawing.Point(38, 92);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(371, 162);
             this.button1.TabIndex = 3;
@@ -60,7 +60,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "MenuScreen";
-            this.Size = new System.Drawing.Size(1016, 716);
+            this.Size = new System.Drawing.Size(888, 716);
             this.ResumeLayout(false);
 
         }

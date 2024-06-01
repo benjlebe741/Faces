@@ -98,7 +98,7 @@ namespace Faces
 
             return (float)((lightRecieverDistance - lightTiltDistance) / recieverTiltDistance);
         }
-        public Color colorValue(List<Light> lights)
+        public Color colorValue(List<Light> lights, float blendPercentage, Color blendColor)
         {
             if (lights.Count <= 0) { return Color.Black; }
 
@@ -113,11 +113,13 @@ namespace Faces
 
                 int r = (initialColor.R) - (255 - l.color.R);
                 int g = (initialColor.G) - (255 - l.color.G);
-                int b = (initialColor.B) - (255 - l.color.B); 
+                int b = (initialColor.B) - (255 - l.color.B);
 
+                
                 //R
                 int newR = (int)(r / 2 * lightVal);
                 newR += (r / 2);
+                newR = (int)((blendPercentage * blendColor.R) + ((1 - blendPercentage) * newR));
 
                 newR = (newR > 255) ? 255 : newR;
                 newR = (newR < 0) ? 0 : newR;
@@ -127,6 +129,7 @@ namespace Faces
                 //G
                 int newG = (int)(g / 2 * lightVal);
                 newG += (g / 2);
+                newG = (int)((blendPercentage * blendColor.G) + ((1 - blendPercentage) * newG));
 
                 newG = (newG > 255) ? 255 : newG;
                 newG = (newG < 0) ? 0 : newG;
@@ -136,6 +139,7 @@ namespace Faces
                 //B
                 int newB = (int)(b / 2 * lightVal);
                 newB += (b / 2);
+                newB = (int)((blendPercentage * blendColor.B) + ((1 - blendPercentage) * newB));
 
                 newB = (newB > 255) ? 255 : newB;
                 newB = (newB < 0) ? 0 : newB;

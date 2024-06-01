@@ -33,14 +33,14 @@ namespace Faces
                 tertiaryLights.Clear();
                 foreach (Face f in faces)
                 {
-                    Color color = f.colorValue(lights);
+                    Color color = f.colorValue(lights, 0, Color.Black);
                     secondaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
                 }
                 lights.AddRange(secondaryLights);
 
                 foreach (Face f in faces)
                 {
-                    Color color = f.colorValue(lights);
+                    Color color = f.colorValue(lights, 0, Color.Black);
                     tertiaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
                 }
                 lights.AddRange(tertiaryLights);

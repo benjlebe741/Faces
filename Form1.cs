@@ -32,41 +32,10 @@ namespace Faces
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            time += 0.008;
-            lights.Clear();
-            secondaryLights.Clear();
-            cursorPos = PointToClient(Cursor.Position);
-            primaryLights[0] = new Light(cursorColor, cursorPos);
-
-            foreach (Face f in faces)
-            {
-                Color color = f.colorValue(primaryLights);
-                secondaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
-            }
-
-            lights.AddRange(primaryLights);
-            lights.AddRange(secondaryLights);
-            Refresh();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-
-            //Unnasigned Points
-            SolidBrush brush = new SolidBrush(Color.FromArgb(205, 255, 0, 255));
-            if (points.Count > 2)
-            {
-                e.Graphics.FillPolygon(brush, points.ToArray());
-            }
-            foreach (PointF p in points)
-            {
-                e.Graphics.FillEllipse(brush, new Rectangle((int)p.X - 4, (int)p.Y - 4, 8, 8));
-            }
-            foreach (Face f in faces)
-            {
-                Color color = f.colorValue(lights);
-                e.Graphics.FillPolygon(new SolidBrush(color), f.points.ToArray());
-            }
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
