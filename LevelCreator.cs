@@ -18,18 +18,10 @@ namespace Faces
     public partial class LevelCreator : UserControl
     {
         //Player Stuff
-        bool[] WSAD = new bool[4] { false, false, false, false };
-        //Jumping
-        const int MAX_Y_SPEED = 16;
-        double ySpeed = 0;
-        int time = 0;
-        double impulse = -35;
-        double accelleration = 1.8;
-        double deceleration = 1;
-
+        public static bool[] WSAD = new bool[4] { false, false, false, false };
+        public static bool jumpPressed = false;
         public static bool airBorn = false;
-        bool jumpPressed = false;
-
+        public static double ySpeed = 0;
 
         //Mouse Stuff
         PointF cursorPos;
@@ -55,8 +47,9 @@ namespace Faces
         PointF movementPoint = new PointF(0, 0);
         PointF desiredParalaxPoint = new PointF();
         PointF desiredMovementPoint = new PointF();
-
         bool paralax = false;
+
+        List<RectangleF> screenBounds = new List<RectangleF>();
 
         //Planes
         List<Plane> planes = new List<Plane> { new Plane(), new Plane(), new Plane() };
@@ -185,26 +178,24 @@ namespace Faces
             xChange = ((WSAD[2]) ? -1 : 0) + ((WSAD[3]) ? 1 : 0);
             xChange *= 8;
 
-            #region Jumping
-            if (jumpPressed)
-            {
-                ySpeed = impulse;
-                jumpPressed = false;
-            }
-            if (time % deceleration == 0)
-            {
-                ySpeed = (ySpeed + accelleration > MAX_Y_SPEED) ? MAX_Y_SPEED : ySpeed + accelleration;
-            }
-            yChange += (int)ySpeed;
-            #endregion
+
 
 
             foreach (PhysicsObject po in planes[playerPlaneDepth].physicsObjects)
             {
                 if (po.id == "Player")
                 {
-                    po.Move(xChange, yChange, planes[playerPlaneDepth].collisionPolygons);
+                    po.Move(planes[playerPlaneDepth].collisionPolygons);
                     desiredParalaxPoint = new PointF(po.body.X + (po.body.Width / 2) + ((WSAD[2]) ? -300 : 0) + ((WSAD[3]) ? 300 : 0), po.body.Y - 100 + ((WSAD[0]) ? -300 : 0) + ((WSAD[1]) ? 300 : 0));
+
+                    if (screenBounds.Count != 0)
+                    {
+                        //Now see if this paralaxPoint fits within the screen bounds
+                        desiredParalaxPoint.X = ((desiredParalaxPoint.X - (this.Width / 2) < screenBounds[0].X) ? screenBounds[0].X + (this.Width / 2) : desiredParalaxPoint.X);
+                        desiredParalaxPoint.X = ((desiredParalaxPoint.X + (this.Width / 2) > screenBounds[0].X + screenBounds[0].Width) ? screenBounds[0].X  + screenBounds[0].Width - (this.Width / 2) : desiredParalaxPoint.X);
+                        desiredParalaxPoint.Y = ((desiredParalaxPoint.Y - (this.Height / 2) < screenBounds[0].Y) ? screenBounds[0].Y + (this.Height / 2) : desiredParalaxPoint.Y);
+                        desiredParalaxPoint.Y = ((desiredParalaxPoint.Y + (this.Height / 2) > screenBounds[0].Y + screenBounds[0].Height) ? screenBounds[0].Y + screenBounds[0].Height - (this.Height / 2) : desiredParalaxPoint.Y);
+                    }
                 }
             }
         }
@@ -250,6 +241,23 @@ namespace Faces
                         if (additionType == "Collisions")
                         {
                             planes[planeDepth].collisionPolygons.Add(ghostPoints);
+                        }
+                        if (additionType == "Screen Bounds")
+                        {
+                            screenBounds.Clear();
+                            float left, right;
+                            left = right = points[0].X;
+                            float up, down;
+                            up = down = points[0].Y;
+                            for (int p = 1; p < points.Count; p++)
+                            {
+                                left = (points[p].X < left) ? points[p].X : left;
+                                right = (points[p].X > right) ? points[p].X : right;
+                                up = (points[p].Y < up) ? points[p].Y : up;
+                                down = (points[p].Y > down) ? points[p].Y : down;
+                            }
+
+                            screenBounds.Add(new RectangleF(left, up, right - left, down - up));
                         }
                         points.Clear();
                     }
@@ -497,6 +505,41 @@ namespace Faces
                 e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Lime)), _points);
             }
 
+            foreach (RectangleF bounds in screenBounds)
+            {
+                PointF[] _points = new PointF[4]
+                {
+                        new PointF(bounds.X,bounds.Y ),
+                        new PointF(bounds.X + bounds.Width,bounds.Y ),
+                        new PointF(bounds.X + bounds.Width,bounds.Y + bounds.Height),
+                        new PointF(bounds.X,bounds.Y + bounds.Height ),
+                };
+                if (paralax)
+                {
+                    for (int p = 0; p < _points.Length; p++)
+                    {
+                        //Tilt the camera depending on the cursors location
+                        float xDif = (paralaxCursorPoint.X - this.Width / 2);
+                        float yDif = (paralaxCursorPoint.Y - this.Height / 2);
+                        _points[p].X -= xDif + ((posPlaneDepth - 0) * xDif / 4);
+                        _points[p].Y -= yDif + ((posPlaneDepth - 0) * yDif / 4);
+
+                        //Move the camera to follow the player, use a bit of paralaxing
+                        _points[p].X -= (paralaxPoint.X - this.Width / 2) / (posPlaneDepth + 1);
+                        _points[p].Y -= (paralaxPoint.Y - this.Height / 2) / (posPlaneDepth + 1);
+                    }
+                }
+                else
+                {
+                    for (int p = 0; p < _points.Length; p++)
+                    {
+                        _points[p].X -= movementPoint.X;
+                        _points[p].Y -= movementPoint.Y;
+                    }
+                }
+
+                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Red)), _points);
+            }
             #endregion
 
             //Show the current Points that are NOT faces YET
@@ -556,6 +599,7 @@ namespace Faces
         {
             regionArt.BackColor = (additionType == "Art") ? Color.White : Color.LightGray;
             regionCollisions.BackColor = (additionType == "Collisions") ? Color.White : Color.LightGray;
+            label4.BackColor = (additionType == "Screen Bounds") ? Color.White : Color.LightGray;
             describeThis();
         }
 
@@ -566,18 +610,6 @@ namespace Faces
 
         private void LevelCreator_MouseDown(object sender, MouseEventArgs e)
         {
-            switch (additionType)
-            {
-                case "Art":
-                case "Collisions":
-                    switch (mode)
-                    {
-                        case "RectangleMode":
-                            cornerOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
-                            break;
-                    }
-                    break;
-            }
         }
 
         private void LevelCreator_MouseUp(object sender, MouseEventArgs e)
@@ -586,14 +618,22 @@ namespace Faces
             {
                 case "Art":
                 case "Collisions":
+                case "Screen Bounds":
                     switch (mode)
                     {
                         case "RectangleMode":
-                            cornerTwo = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
-                            points.Add(cornerOne);
-                            points.Add(new PointF(cornerOne.X, cornerTwo.Y));
-                            points.Add(cornerTwo);
-                            points.Add(new PointF(cornerTwo.X, cornerOne.Y));
+                            if (e.Button == MouseButtons.Left)
+                            { cornerOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y); }
+                            else
+                            {
+                                points.Clear();
+                                cornerTwo = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                                points.Add(cornerOne);
+                                points.Add(new PointF(cornerOne.X, cornerTwo.Y));
+                                points.Add(cornerTwo);
+                                points.Add(new PointF(cornerTwo.X, cornerOne.Y));
+                            }
+
                             break;
                         case "PolygonMode":
                             points.Add(new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y));
@@ -621,8 +661,20 @@ namespace Faces
 
             //Add a new level with this ID 
             XmlElement newLevel = doc.CreateElement("Level" + currentAsset);
-            newLevel.SetAttribute("PlaneCount", "" + planes.Count);
 
+            //Add the screen bounds to the level
+            foreach (RectangleF bounds in screenBounds)
+            {
+                XmlElement sb = doc.CreateElement("ScreenBounds");
+                sb.SetAttribute("x", "" + bounds.X);
+                sb.SetAttribute("y", "" + bounds.Y);
+                sb.SetAttribute("width", "" + bounds.Width);
+                sb.SetAttribute("height", "" + bounds.Height);
+
+                newLevel.AppendChild(sb);
+            }
+
+            newLevel.SetAttribute("PlaneCount", "" + planes.Count);
             //Add the faces to the levels planes
             foreach (Plane pl in planes)
             {
@@ -717,7 +769,16 @@ namespace Faces
             planes.Clear();
             foreach (XmlNode level in loadAsset)
             {
-                foreach (XmlNode pl in level.ChildNodes)
+                foreach (XmlNode sb in level.SelectNodes("ScreenBounds"))
+                {
+                    screenBounds.Clear();
+                    float _x = (float)Convert.ToDouble(sb.Attributes["x"].Value);
+                    float _y = (float)Convert.ToDouble(sb.Attributes["y"].Value);
+                    float _width = (float)Convert.ToDouble(sb.Attributes["width"].Value);
+                    float _height = (float)Convert.ToDouble(sb.Attributes["height"].Value);
+                    screenBounds.Add(new RectangleF(_x, _y, _width, _height));
+                }
+                foreach (XmlNode pl in level.SelectNodes("Plane"))
                 {
                     Plane plane = new Plane();
                     //For each plane inside the level
@@ -764,7 +825,7 @@ namespace Faces
                         Rectangle ghostRect = new Rectangle();
 
                         ghostRect.X = Convert.ToInt32(po.Attributes["x"].Value);
-                        ghostRect.Y = Convert.ToInt32(po.Attributes["x"].Value);
+                        ghostRect.Y = Convert.ToInt32(po.Attributes["y"].Value);
                         ghostRect.Width = Convert.ToInt32(po.Attributes["width"].Value);
                         ghostRect.Height = Convert.ToInt32(po.Attributes["height"].Value);
 
@@ -835,6 +896,12 @@ namespace Faces
                     }
                     break;
             }
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+            additionType = "Screen Bounds";
+            additionTypeCheck();
         }
     }
 }

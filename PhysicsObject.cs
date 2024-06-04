@@ -16,26 +16,53 @@ namespace Faces
 
         int normalX, normalY;
 
+        //Jumping
+        const int MAX_Y_SPEED = 16;
+        int time = 0;
+        double impulse = -35;
+        double accelleration = 1.8;
+        double deceleration = 1;
+
         public PhysicsObject(Rectangle _body, string _id)
         {
             body = pastBody = _body;
             id = _id;
         }
-
-        public void Move(float xChange, float yChange, List<PointF[]> polygons)
+    
+        public void Move(List<PointF[]> polygons)
         {
             LevelCreator.airBorn = true;
-
+            time++;
             pastBody.Location = body.Location;
 
             normalX = normalY = 0;
 
-
-            body.X += (int)xChange;
-            body.Y += (int)yChange;
+            #region Jumping
+            if (LevelCreator.jumpPressed)
+            {
+                LevelCreator.ySpeed = impulse;
+                LevelCreator.jumpPressed = false;
+            }
+            if (time % deceleration == 0)
+            {
+                LevelCreator.ySpeed = (LevelCreator.ySpeed + accelleration > MAX_Y_SPEED) ? MAX_Y_SPEED : LevelCreator.ySpeed + accelleration;
+            }
+            body.Y += (int)LevelCreator.ySpeed;
+            #endregion
 
             collisionChecks(polygons);
+            
+            int speed = 8;
+            //body.Y += (LevelCreator.WSAD[0]) ? -speed : 0;
+            body.Y += (LevelCreator.WSAD[1]) ? speed : 0;
+            body.X += (LevelCreator.WSAD[2]) ? -speed : 0;
+            body.X += (LevelCreator.WSAD[3]) ? speed : 0;
 
+
+            int xChange = pastBody.X - body.X;
+            int yChange = pastBody.Y - body.Y;
+
+            collisionChecks(polygons);
 
             //NOW ADD THE NORMAL FORCE
             pastBody = body;
@@ -45,15 +72,13 @@ namespace Faces
 
             if (yChange != 0)
             {
-                body.X += normalX * 3;
+                body.X += normalX * 2;
             }
             if (xChange != 0)
             {
-                body.Y += normalY * 3;
+                body.Y += normalY * 2;
             }
-
             collisionChecks(polygons);
-
         }
 
         void collisionChecks(List<PointF[]> polygons)
@@ -101,7 +126,7 @@ namespace Faces
 
                             if (sideOfLine > 1)
                             {
-                               LevelCreator.airBorn = false;
+                                LevelCreator.airBorn = false;
                             }
                         }
                         else
@@ -141,118 +166,118 @@ namespace Faces
 
                     body.X += (int)xDirectionChange;
                     body.Y += (int)yDirectionChange;
-                        for (int p = 0; p < polygon.Length; p++)
-                        {
-                            PointF pOne = polygon[p];
-                            PointF pTwo = (p + 1 >= polygon.Length) ? polygon[0] : polygon[p + 1];
-                            if (lineIntersects(new Point((int)pOne.X, (int)pOne.Y), new Point((int)pTwo.X, (int)pTwo.Y), body, pastBody, false)) //If there is an intersection
-                            {
-                                intersection = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            bool lineIntersects(Point _pOne, Point _pTwo, Rectangle _rect, Rectangle _pastRect, bool move)
-            {
-                if (_rect.Contains(_pOne) || _rect.Contains(_pTwo))
-                {
-                    return true;
-                }
-
-                if (_pOne.X == _pTwo.X)
-                {
-                    _pOne.X += 1;
-                }
-                if (_pOne.Y == _pTwo.Y)
-                {
-                    _pOne.Y += 1;
-                }
-
-
-                Point leftMost = (_pOne.X < _pTwo.X) ? _pOne : _pTwo;
-                Point rightMost = (leftMost == _pTwo) ? _pOne : _pTwo;
-                Point upMost = (_pOne.Y < _pTwo.Y) ? _pOne : _pTwo;
-                Point downMost = (upMost == _pTwo) ? _pOne : _pTwo;
-
-
-                //Are we to the left or right or above or below the line?
-                if (_rect.Right < leftMost.X || _rect.X > rightMost.X || _rect.Bottom < upMost.Y || _rect.Y > downMost.Y)
-                { return false; }
-
-
-                bool increasingSlope = (leftMost.Y < rightMost.Y) ? true : false;
-
-                //Find what points are inside the line-to-be-checked's rectangle, we can also narrow down the points to be checked based on slope
-                List<Point> rectCorners;
-
-                float deltaX = ((_pTwo.X - _pOne.X) == 0) ? ((_pTwo.X - _pOne.X) + (float)0.00001) : (_pTwo.X - _pOne.X);
-                float slope = (_pTwo.Y - _pOne.Y) / deltaX;
-
-                float projectedPreviousX = -(((_pOne.Y - (pastBody.Y + (pastBody.Height / 2))) / slope) - _pOne.X);
-                float sideOfLine = projectedPreviousX - (pastBody.X + (pastBody.Width / 2));
-
-                if (!increasingSlope)
-                {
-                    //Bottom Right or Top Left
-                    Point ghostPoint = (sideOfLine > 1) ? new Point(_rect.X + _rect.Width - 1, _rect.Y + _rect.Height - 1) : new Point(_rect.X, _rect.Y);
-
-                    rectCorners = new List<Point>
-                {
-                    ghostPoint,
-                };
-                }
-                else
-                {
-                    //Top Right or Bottom Left
-                    Point ghostPoint = (sideOfLine > 1) ? new Point(_rect.X + _rect.Width - 1, _rect.Y) : new Point(_rect.X, _rect.Y + _rect.Height - 1);
-
-                    rectCorners = new List<Point>
-                {
-                    ghostPoint,
-                };
-                }
-
-
-
-
-
-                for (int i = 0; i < rectCorners.Count; i++)
-                {
-                    //Project this point onto the line-to-be-checked, both using the points x and y coord
-                    int x = rectCorners[i].X;
-                    int y = rectCorners[i].Y;
-                    //Rearrange the line equation with those x and y coordinates as one of the unknowns, get this new point
-                    Point subbedInX, subbedInY;
-
-                    float newY = -((slope * (_pOne.X - x)) - _pOne.Y);
-                    float newX = -(((_pOne.Y - y) / slope) - _pOne.X);
-
-                    subbedInX = new Point(x, (int)newY);
-                    subbedInY = new Point((int)newX, y);
-
-
-                    //(Does this projected point exist inside the inputed rectangle) ? Intersection : Continue
-                    if (_rect.Contains(subbedInX) || body.Contains(subbedInY))
+                    for (int p = 0; p < polygon.Length; p++)
                     {
-                        int fn = 3;
-                        if (!increasingSlope && move)
+                        PointF pOne = polygon[p];
+                        PointF pTwo = (p + 1 >= polygon.Length) ? polygon[0] : polygon[p + 1];
+                        if (lineIntersects(new Point((int)pOne.X, (int)pOne.Y), new Point((int)pTwo.X, (int)pTwo.Y), body, pastBody, false)) //If there is an intersection
                         {
-                            body.X += (sideOfLine > 1) ? -fn : fn;
-                            body.Y += (sideOfLine > 1) ? -fn : fn;
+                            intersection = true;
                         }
-                        else if (move)
-                        {
-                            body.X += (sideOfLine > 1) ? -fn : fn;
-                            body.Y += (sideOfLine > 1) ? fn : -fn;
-                        }
-                        return true;
-
                     }
                 }
-
-                return false;
             }
         }
+
+        bool lineIntersects(Point _pOne, Point _pTwo, Rectangle _rect, Rectangle _pastRect, bool move)
+        {
+            if (_rect.Contains(_pOne) || _rect.Contains(_pTwo))
+            {
+                return true;
+            }
+
+            if (_pOne.X == _pTwo.X)
+            {
+                _pOne.X += 1;
+            }
+            if (_pOne.Y == _pTwo.Y)
+            {
+                _pOne.Y += 1;
+            }
+
+
+            Point leftMost = (_pOne.X < _pTwo.X) ? _pOne : _pTwo;
+            Point rightMost = (leftMost == _pTwo) ? _pOne : _pTwo;
+            Point upMost = (_pOne.Y < _pTwo.Y) ? _pOne : _pTwo;
+            Point downMost = (upMost == _pTwo) ? _pOne : _pTwo;
+
+
+            //Are we to the left or right or above or below the line?
+            if (_rect.Right < leftMost.X || _rect.X > rightMost.X || _rect.Bottom < upMost.Y || _rect.Y > downMost.Y)
+            { return false; }
+
+
+            bool increasingSlope = (leftMost.Y < rightMost.Y) ? true : false;
+
+            //Find what points are inside the line-to-be-checked's rectangle, we can also narrow down the points to be checked based on slope
+            List<Point> rectCorners;
+
+            float deltaX = ((_pTwo.X - _pOne.X) == 0) ? ((_pTwo.X - _pOne.X) + (float)0.00001) : (_pTwo.X - _pOne.X);
+            float slope = (_pTwo.Y - _pOne.Y) / deltaX;
+
+            float projectedPreviousX = -(((_pOne.Y - (pastBody.Y + (pastBody.Height / 2))) / slope) - _pOne.X);
+            float sideOfLine = projectedPreviousX - (pastBody.X + (pastBody.Width / 2));
+
+            if (!increasingSlope)
+            {
+                //Bottom Right or Top Left
+                Point ghostPoint = (sideOfLine > 1) ? new Point(_rect.X + _rect.Width - 1, _rect.Y + _rect.Height - 1) : new Point(_rect.X, _rect.Y);
+
+                rectCorners = new List<Point>
+                {
+                    ghostPoint,
+                };
+            }
+            else
+            {
+                //Top Right or Bottom Left
+                Point ghostPoint = (sideOfLine > 1) ? new Point(_rect.X + _rect.Width - 1, _rect.Y) : new Point(_rect.X, _rect.Y + _rect.Height - 1);
+
+                rectCorners = new List<Point>
+                {
+                    ghostPoint,
+                };
+            }
+
+
+
+
+
+            for (int i = 0; i < rectCorners.Count; i++)
+            {
+                //Project this point onto the line-to-be-checked, both using the points x and y coord
+                int x = rectCorners[i].X;
+                int y = rectCorners[i].Y;
+                //Rearrange the line equation with those x and y coordinates as one of the unknowns, get this new point
+                Point subbedInX, subbedInY;
+
+                float newY = -((slope * (_pOne.X - x)) - _pOne.Y);
+                float newX = -(((_pOne.Y - y) / slope) - _pOne.X);
+
+                subbedInX = new Point(x, (int)newY);
+                subbedInY = new Point((int)newX, y);
+
+
+                //(Does this projected point exist inside the inputed rectangle) ? Intersection : Continue
+                if (_rect.Contains(subbedInX) || body.Contains(subbedInY))
+                {
+                    int fn = 3;
+                    if (!increasingSlope && move)
+                    {
+                        body.X += (sideOfLine > 1) ? -fn : fn;
+                        body.Y += (sideOfLine > 1) ? -fn : fn;
+                    }
+                    else if (move)
+                    {
+                        body.X += (sideOfLine > 1) ? -fn : fn;
+                        body.Y += (sideOfLine > 1) ? fn : -fn;
+                    }
+                    return true;
+
+                }
+            }
+
+            return false;
+        }
     }
+}
