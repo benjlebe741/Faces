@@ -13,7 +13,8 @@ namespace Faces
         //Holds all the artwork & Assets
         public List<Face> faces = new List<Face>();
         //Holds all the collision lines
-        public List<PointF[]> solidShapes = new List<PointF[]>();
+        public List<PointF[]> collisionPolygons = new List<PointF[]>();
+        public List<PhysicsObject> physicsObjects= new List<PhysicsObject>();
 
         //Holds all the lights
         public List<Light> primaryLights = new List<Light>();

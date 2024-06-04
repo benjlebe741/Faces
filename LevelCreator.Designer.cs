@@ -102,7 +102,6 @@
             this.currentAssetLabel.TabIndex = 23;
             this.currentAssetLabel.Text = "0";
             this.currentAssetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.currentAssetLabel.Click += new System.EventHandler(this.currentAssetLabel_Click);
             // 
             // loadLabel
             // 
@@ -124,7 +123,6 @@
             this.currentColor.Size = new System.Drawing.Size(117, 52);
             this.currentColor.TabIndex = 20;
             this.currentColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.currentColor.Click += new System.EventHandler(this.currentColor_Click);
             // 
             // nextColor
             // 
@@ -134,7 +132,6 @@
             this.nextColor.Size = new System.Drawing.Size(117, 52);
             this.nextColor.TabIndex = 19;
             this.nextColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.nextColor.Click += new System.EventHandler(this.nextColor_Click);
             // 
             // LightsToggle
             // 
@@ -157,7 +154,6 @@
             this.scaleLabel1.TabIndex = 28;
             this.scaleLabel1.Text = "r: set red";
             this.scaleLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.scaleLabel1.Click += new System.EventHandler(this.scaleLabel1_Click);
             // 
             // scaleLabel2
             // 
@@ -169,7 +165,6 @@
             this.scaleLabel2.TabIndex = 29;
             this.scaleLabel2.Text = "g: set green";
             this.scaleLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.scaleLabel2.Click += new System.EventHandler(this.scaleLabel2_Click);
             // 
             // scaleLabel3
             // 
@@ -181,7 +176,6 @@
             this.scaleLabel3.TabIndex = 30;
             this.scaleLabel3.Text = "b: set blue";
             this.scaleLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.scaleLabel3.Click += new System.EventHandler(this.scaleLabel3_Click);
             // 
             // scaleLabel4
             // 
@@ -193,7 +187,6 @@
             this.scaleLabel4.TabIndex = 31;
             this.scaleLabel4.Text = "a: set \'a\'";
             this.scaleLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.scaleLabel4.Click += new System.EventHandler(this.scaleLabel4_Click);
             // 
             // scaleLabel5
             // 
@@ -205,7 +198,6 @@
             this.scaleLabel5.TabIndex = 32;
             this.scaleLabel5.Text = "s: scale";
             this.scaleLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.scaleLabel5.Click += new System.EventHandler(this.scaleLabel5_Click);
             // 
             // SelectMode
             // 
@@ -234,7 +226,6 @@
             this.scaleLabel6.TabIndex = 34;
             this.scaleLabel6.Text = "f: rotate";
             this.scaleLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.scaleLabel6.Click += new System.EventHandler(this.scaleLabel6_Click);
             // 
             // label1
             // 
@@ -279,7 +270,6 @@
             this.describeCurrent.Size = new System.Drawing.Size(118, 86);
             this.describeCurrent.TabIndex = 43;
             this.describeCurrent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.describeCurrent.Click += new System.EventHandler(this.describeCurrent_Click);
             // 
             // currentLevelLabel
             // 
@@ -291,7 +281,6 @@
             this.currentLevelLabel.TabIndex = 45;
             this.currentLevelLabel.Text = "0";
             this.currentLevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.currentLevelLabel.Click += new System.EventHandler(this.currentLevelLabel_Click);
             // 
             // loadLevel
             // 
@@ -405,6 +394,7 @@
             this.Size = new System.Drawing.Size(1534, 796);
             this.Load += new System.EventHandler(this.LevelCreator_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.LevelCreator_Paint);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.LevelCreator_KeyUp);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LevelCreator_MouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LevelCreator_MouseUp);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.LevelCreator_PreviewKeyDown);
