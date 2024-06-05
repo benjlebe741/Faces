@@ -70,13 +70,13 @@ namespace Faces
             normalX /= (normalX != 0) ? Math.Abs(normalX) : 1;
             normalY /= (normalY != 0) ? Math.Abs(normalY) : 1;
 
+            if (xChange == 0)
+            {
+                body.X += normalX;
+            }
             if (yChange != 0)
             {
-                body.X += normalX * 2;
-            }
-            if (xChange != 0)
-            {
-                body.Y += normalY * 2;
+                body.Y += normalY;
             }
             collisionChecks(polygons);
         }
@@ -90,6 +90,7 @@ namespace Faces
             double yDirectionChange = (deltaY == 0) ? 0 : (Math.Abs(deltaY) / deltaY);
 
             bool intersection = false;
+
             foreach (PointF[] polygon in polygons)
             {
                 for (int p = 0; p < polygon.Length; p++)
@@ -168,9 +169,11 @@ namespace Faces
                     body.Y += (int)yDirectionChange;
                     for (int p = 0; p < polygon.Length; p++)
                     {
-                        PointF pOne = polygon[p];
-                        PointF pTwo = (p + 1 >= polygon.Length) ? polygon[0] : polygon[p + 1];
-                        if (lineIntersects(new Point((int)pOne.X, (int)pOne.Y), new Point((int)pTwo.X, (int)pTwo.Y), body, pastBody, false)) //If there is an intersection
+                        Point pOne = new Point((int)polygon[p].X, (int)polygon[p].Y);
+                        PointF pTwoTemp = (p + 1 >= polygon.Length) ? polygon[0] : polygon[p + 1];
+                        Point pTwo = new Point((int)(pTwoTemp.X), (int)(pTwoTemp.Y));
+
+                        if (lineIntersects(pOne,pTwo, body, pastBody, false)) //If there is an intersection
                         {
                             intersection = true;
                         }

@@ -186,7 +186,7 @@ namespace Faces
                 if (po.id == "Player")
                 {
                     po.Move(planes[playerPlaneDepth].collisionPolygons);
-                    desiredParalaxPoint = new PointF(po.body.X + (po.body.Width / 2) + ((WSAD[2]) ? -300 : 0) + ((WSAD[3]) ? 300 : 0), po.body.Y - 100 + ((WSAD[0]) ? -300 : 0) + ((WSAD[1]) ? 300 : 0));
+                    desiredParalaxPoint = new PointF(po.body.X + (po.body.Width / 2) + ((WSAD[2]) ? -300 : 0) + ((WSAD[3]) ? 300 : 0), po.body.Y + (po.body.Height / 2) + ((WSAD[0]) ? -300 : 0) + ((WSAD[1]) ? 300 : 0));
 
                     if (screenBounds.Count != 0)
                     {
@@ -195,6 +195,7 @@ namespace Faces
                         desiredParalaxPoint.X = ((desiredParalaxPoint.X + (this.Width / 2) > screenBounds[0].X + screenBounds[0].Width) ? screenBounds[0].X  + screenBounds[0].Width - (this.Width / 2) : desiredParalaxPoint.X);
                         desiredParalaxPoint.Y = ((desiredParalaxPoint.Y - (this.Height / 2) < screenBounds[0].Y) ? screenBounds[0].Y + (this.Height / 2) : desiredParalaxPoint.Y);
                         desiredParalaxPoint.Y = ((desiredParalaxPoint.Y + (this.Height / 2) > screenBounds[0].Y + screenBounds[0].Height) ? screenBounds[0].Y + screenBounds[0].Height - (this.Height / 2) : desiredParalaxPoint.Y);
+
                     }
                 }
             }
