@@ -27,6 +27,7 @@ namespace Faces
         PointF cursorPos;
         Color cursorColor = Color.White;
         Color determineColor = Color.White;
+        PointF selectionPointOne = new PointF();
 
         //Points, Assets, Faces
         string mode = "Not Set";
@@ -151,6 +152,8 @@ namespace Faces
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            label1.Text = "" + planes[planeDepth].assets.Count;
+
             float xTilt = (desiredParalaxPoint.X - paralaxPoint.X) / 2;
             float yTilt = (desiredParalaxPoint.Y - 100 - paralaxPoint.Y) / 2;
             paralaxCursorPoint.X -= (paralaxCursorPoint.X - this.Width / 2 + (xTilt)) / 240;
@@ -170,16 +173,6 @@ namespace Faces
             {
                 p.tick(surfaceLights);
             }
-            Refresh();
-
-
-
-            float xChange, yChange = 0;
-            xChange = ((WSAD[2]) ? -1 : 0) + ((WSAD[3]) ? 1 : 0);
-            xChange *= 8;
-
-
-
 
             foreach (PhysicsObject po in planes[playerPlaneDepth].physicsObjects)
             {
@@ -192,13 +185,15 @@ namespace Faces
                     {
                         //Now see if this paralaxPoint fits within the screen bounds
                         desiredParalaxPoint.X = ((desiredParalaxPoint.X - (this.Width / 2) < screenBounds[0].X) ? screenBounds[0].X + (this.Width / 2) : desiredParalaxPoint.X);
-                        desiredParalaxPoint.X = ((desiredParalaxPoint.X + (this.Width / 2) > screenBounds[0].X + screenBounds[0].Width) ? screenBounds[0].X  + screenBounds[0].Width - (this.Width / 2) : desiredParalaxPoint.X);
+                        desiredParalaxPoint.X = ((desiredParalaxPoint.X + (this.Width / 2) > screenBounds[0].X + screenBounds[0].Width) ? screenBounds[0].X + screenBounds[0].Width - (this.Width / 2) : desiredParalaxPoint.X);
                         desiredParalaxPoint.Y = ((desiredParalaxPoint.Y - (this.Height / 2) < screenBounds[0].Y) ? screenBounds[0].Y + (this.Height / 2) : desiredParalaxPoint.Y);
                         desiredParalaxPoint.Y = ((desiredParalaxPoint.Y + (this.Height / 2) > screenBounds[0].Y + screenBounds[0].Height) ? screenBounds[0].Y + screenBounds[0].Height - (this.Height / 2) : desiredParalaxPoint.Y);
 
                     }
                 }
             }
+
+            Refresh();
         }
         void determineNextColor()
         {
@@ -219,6 +214,22 @@ namespace Faces
             int moveSpeed = 8;
             switch (e.KeyCode)
             {
+                case Keys.C:
+                    foreach (Plane pl in planes)
+                    {
+                        foreach (Asset a in pl.assets)
+                        {
+                            if (a.selected)
+                            {
+                                a.ColorFaces(cursorColor, cursorColor.A / 255);
+                            }
+                        }
+                    }
+                    break;
+                case Keys.V:
+                case Keys.F:
+                    selectionPointOne = new PointF(selectionPointOne.X + movementPoint.X, selectionPointOne.Y + movementPoint.Y);
+                    break;
                 case Keys.Y:
                     planes[planeDepth].primaryLights.Add(new Light(cursorColor, cursorPos));
                     break;
@@ -315,9 +326,6 @@ namespace Faces
 
         private void loadLabel_Click(object sender, EventArgs e)
         {
-            //Clear the faces list
-            planes[planeDepth].faces.Clear();
-
             XmlDocument doc = new XmlDocument();
             doc.Load("Assets.xml");
 
@@ -326,6 +334,7 @@ namespace Faces
 
             foreach (XmlNode n in loadAsset)
             {
+                List<Face> faces = new List<Face>();
                 //For each face inside the asset
                 foreach (XmlNode f in n.ChildNodes)
                 {
@@ -343,8 +352,9 @@ namespace Faces
                         facePoints.Add(new PointF(x, y));
                     }
 
-                    planes[planeDepth].faces.Add(new Face(facePoints, new PointF(xTilt, yTilt), color));
+                    faces.Add(new Face(facePoints, new PointF(xTilt, yTilt), color));
                 }
+                planes[planeDepth].assets.Add(new Asset(faces));
             }
 
 
@@ -360,66 +370,18 @@ namespace Faces
             {
                 posPlaneDepth--;
                 negPlaneDepth++;
-                #region Shaded
                 //Fill the faces
-                if (lighting)
+
+                foreach (Asset a in plane.assets)
                 {
-                    foreach (Face f in plane.faces)
+                    foreach (Face f in a.faces)
                     {
                         PointF[] _points = f.points.ToArray();
                         if (paralax)
                         {
                             for (int p = 0; p < _points.Length; p++)
                             {
-                                //Tilt the camera depending on the cursors location
-                                float xDif = (paralaxCursorPoint.X - this.Width / 2);
-                                float yDif = (paralaxCursorPoint.Y - this.Height / 2);
-                                _points[p].X -= xDif + ((posPlaneDepth - 0) * xDif / 4);
-                                _points[p].Y -= yDif + ((posPlaneDepth - 0) * yDif / 4);
-
-                                //Move the camera to follow the player, use a bit of paralaxing
-                                float desiredX = _points[p].X + (paralaxPoint.X - this.Width / 2);
-                                float desiredY = _points[p].Y + (paralaxPoint.Y - this.Height / 2);
-                                _points[p].X -= (paralaxPoint.X - this.Width / 2) / (posPlaneDepth + 1);
-                                _points[p].Y -= (paralaxPoint.Y - this.Height / 2) / (posPlaneDepth + 1);
-                            }
-                        }
-                        else
-                        {
-                            for (int p = 0; p < _points.Length; p++)
-                            {
-                                _points[p].X -= movementPoint.X;
-                                _points[p].Y -= movementPoint.Y;
-                            }
-                        }
-                        Color color = f.colorValue(plane.lights, posPlaneDepth / planes.Count, backgroundColor);
-                        e.Graphics.FillPolygon(new SolidBrush(color), _points);
-                        if (outline && plane == planes[planeDepth])
-                        {
-                            e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Pink)), _points);
-                        }
-                    }
-                }
-                #endregion
-                #region UnShaded
-                else
-                {
-                    foreach (Face f in plane.faces)
-                    {
-                        PointF[] _points = f.points.ToArray();
-                        if (paralax)
-                        {
-                            for (int p = 0; p < _points.Length; p++)
-                            {
-                                //Tilt the camera depending on the cursors location
-                                float xDif = (paralaxCursorPoint.X - this.Width / 2);
-                                float yDif = (paralaxCursorPoint.Y - this.Height / 2);
-                                _points[p].X -= xDif + ((posPlaneDepth - 0) * xDif / 4);
-                                _points[p].Y -= yDif + ((posPlaneDepth - 0) * yDif / 4);
-
-                                //Move the camera to follow the player, use a bit of paralaxing
-                                _points[p].X -= (paralaxPoint.X - this.Width / 2) / (posPlaneDepth + 1);
-                                _points[p].Y -= (paralaxPoint.Y - this.Height / 2) / (posPlaneDepth + 1);
+                                _points[p] = paralaxThisPoint(_points[p], posPlaneDepth + a.depthBoost);
                             }
                         }
                         else
@@ -431,10 +393,50 @@ namespace Faces
                             }
                         }
                         Color color = f.initialColor;
+                        if (lighting)
+                        {
+                            color = f.colorValue(plane.lights, posPlaneDepth / planes.Count, backgroundColor);
+                        }
                         e.Graphics.FillPolygon(new SolidBrush(color), _points);
+                        if (outline && plane == planes[planeDepth])
+                        {
+                            e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Pink)), _points);
+                        }
+                        if (a.selected)
+                        {
+                            e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.White), 2), _points);
+                        }
                     }
                 }
-                #endregion
+                foreach (Face f in plane.faces)
+                {
+                    PointF[] _points = f.points.ToArray();
+                    if (paralax)
+                    {
+                        for (int p = 0; p < _points.Length; p++)
+                        {
+                            _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
+                        }
+                    }
+                    else
+                    {
+                        for (int p = 0; p < _points.Length; p++)
+                        {
+                            _points[p].X -= movementPoint.X;
+                            _points[p].Y -= movementPoint.Y;
+                        }
+                    }
+                    Color color = f.initialColor;
+                    if (lighting)
+                    {
+                        color = f.colorValue(plane.lights, posPlaneDepth / planes.Count, backgroundColor);
+                    }
+                    e.Graphics.FillPolygon(new SolidBrush(color), _points);
+                    if (outline && plane == planes[planeDepth])
+                    {
+                        e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Pink)), _points);
+                    }
+                }
 
                 foreach (PhysicsObject po in plane.physicsObjects)
                 {
@@ -449,15 +451,7 @@ namespace Faces
                     {
                         for (int p = 0; p < _points.Length; p++)
                         {
-                            //Tilt the camera depending on the cursors location
-                            float xDif = (paralaxCursorPoint.X - this.Width / 2);
-                            float yDif = (paralaxCursorPoint.Y - this.Height / 2);
-                            _points[p].X -= xDif + ((posPlaneDepth - 0) * xDif / 4);
-                            _points[p].Y -= yDif + ((posPlaneDepth - 0) * yDif / 4);
-
-                            //Move the camera to follow the player, use a bit of paralaxing
-                            _points[p].X -= (paralaxPoint.X - this.Width / 2) / (posPlaneDepth + 1);
-                            _points[p].Y -= (paralaxPoint.Y - this.Height / 2) / (posPlaneDepth + 1);
+                            _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
                         }
                     }
                     else
@@ -472,7 +466,6 @@ namespace Faces
                     e.Graphics.FillPolygon(new SolidBrush(color), _points);
                 }
             }
-
             #region Show Collision Lines
 
             foreach (PointF[] poly in planes[planeDepth].collisionPolygons)
@@ -482,17 +475,7 @@ namespace Faces
                 {
                     for (int p = 0; p < _points.Length; p++)
                     {
-                        //Tilt the camera depending on the cursors location
-                        float xDif = (paralaxCursorPoint.X - this.Width / 2);
-                        float yDif = (paralaxCursorPoint.Y - this.Height / 2);
-                        _points[p].X -= xDif + ((posPlaneDepth - 0) * xDif / 4);
-                        _points[p].Y -= yDif + ((posPlaneDepth - 0) * yDif / 4);
-
-                        //Move the camera to follow the player, use a bit of paralaxing
-                        float desiredX = _points[p].X + (paralaxPoint.X - this.Width / 2);
-                        float desiredY = _points[p].Y + (paralaxPoint.Y - this.Height / 2);
-                        _points[p].X -= (paralaxPoint.X - this.Width / 2) / (posPlaneDepth + 1);
-                        _points[p].Y -= (paralaxPoint.Y - this.Height / 2) / (posPlaneDepth + 1);
+                        _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
                     }
                 }
                 else
@@ -519,15 +502,7 @@ namespace Faces
                 {
                     for (int p = 0; p < _points.Length; p++)
                     {
-                        //Tilt the camera depending on the cursors location
-                        float xDif = (paralaxCursorPoint.X - this.Width / 2);
-                        float yDif = (paralaxCursorPoint.Y - this.Height / 2);
-                        _points[p].X -= xDif + ((posPlaneDepth - 0) * xDif / 4);
-                        _points[p].Y -= yDif + ((posPlaneDepth - 0) * yDif / 4);
-
-                        //Move the camera to follow the player, use a bit of paralaxing
-                        _points[p].X -= (paralaxPoint.X - this.Width / 2) / (posPlaneDepth + 1);
-                        _points[p].Y -= (paralaxPoint.Y - this.Height / 2) / (posPlaneDepth + 1);
+                        _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
                     }
                 }
                 else
@@ -567,8 +542,13 @@ namespace Faces
             paralaxGhost.Y -= (paralaxPoint.Y - this.Height / 2);
 
             e.Graphics.FillEllipse(new SolidBrush(Color.Pink), new Rectangle((int)paralaxGhost.X - 4, (int)paralaxGhost.Y - 4, 8, 8));
-            e.Graphics.FillEllipse(new SolidBrush(Color.DarkCyan), new Rectangle((int)paralaxPoint.X - 4, (int)paralaxPoint.Y - 4, 8, 8));
-            e.Graphics.FillEllipse(new SolidBrush(Color.DarkGoldenrod), new Rectangle((int)paralaxCursorPoint.X - 4, (int)paralaxCursorPoint.Y - 4, 8, 8));
+            PointF ghostCursorPoint = cursorPos;
+            if (paralax)
+            {
+                ghostCursorPoint = paralaxThisPoint(cursorPos, planeDepth);
+                ghostCursorPoint = paralaxThisPoint(cursorPos, planeDepth);
+            }
+            e.Graphics.FillEllipse(new SolidBrush(Color.DarkGoldenrod), new Rectangle((int)ghostCursorPoint.X - 3, (int)ghostCursorPoint.Y - 3, 8, 8));
 
         }
 
@@ -640,6 +620,12 @@ namespace Faces
                             points.Add(new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y));
                             break;
                         case "SelectMode":
+                            foreach (Asset a in planes[planeDepth].assets)
+                            {
+                                PointF _point = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                                if (paralax) { _point = paralaxThisPoint(cursorPos, planeDepth); }
+                                a.SelectAsset(_point);
+                            }
                             break;
                     }
                     break;
@@ -705,6 +691,38 @@ namespace Faces
                     face.SetAttribute("b", "" + f.initialColor.B);
 
                     plane.AppendChild(face);
+                }
+                foreach (Asset a in pl.assets)
+                {
+                    XmlElement asset = doc.CreateElement("Asset");
+
+                    foreach (Face f in a.faces)
+                    {
+                        XmlElement face = doc.CreateElement("Face");
+                        face.SetAttribute("PointCount", "" + f.points.Count);
+
+                        //Add the points of each face to the face
+                        foreach (PointF p in f.points)
+                        {
+                            XmlElement point = doc.CreateElement("PointF");
+                            point.SetAttribute("x", "" + p.X);
+                            point.SetAttribute("y", "" + p.Y);
+                            face.AppendChild(point);
+                        }
+
+                        //Add the tilt of the face
+                        face.SetAttribute("xTilt", "" + f.tiltedReciever.X);
+                        face.SetAttribute("yTilt", "" + f.tiltedReciever.Y);
+
+                        //Add the initial color of the face
+                        face.SetAttribute("a", "" + f.initialColor.A);
+                        face.SetAttribute("r", "" + f.initialColor.R);
+                        face.SetAttribute("g", "" + f.initialColor.G);
+                        face.SetAttribute("b", "" + f.initialColor.B);
+
+                        asset.AppendChild(face);
+                    }
+                    plane.AppendChild(asset);
                 }
                 foreach (PointF[] c in pl.collisionPolygons)
                 {
@@ -801,6 +819,29 @@ namespace Faces
 
                         plane.faces.Add(new Face(facePoints, new PointF(xTilt, yTilt), color));
                     }
+                    foreach (XmlNode a in pl.SelectNodes("Asset"))
+                    {
+                        List<Face> faces = new List<Face>();
+                        foreach (XmlNode f in a.SelectNodes("Face"))
+                        {
+                            List<PointF> facePoints = new List<PointF>();
+                            float xTilt = (float)Convert.ToDouble(f.Attributes["xTilt"].Value);
+                            float yTilt = (float)Convert.ToDouble(f.Attributes["yTilt"].Value);
+                            Color color = Color.FromArgb(Convert.ToInt16(f.Attributes["a"].Value), Convert.ToInt16(f.Attributes["r"].Value), Convert.ToInt16(f.Attributes["g"].Value), Convert.ToInt16(f.Attributes["b"].Value));
+
+                            //For each point inside the face
+                            foreach (XmlNode p in f.ChildNodes)
+                            {
+                                float x = (float)Convert.ToDouble(p.Attributes["x"].Value);
+                                float y = (float)Convert.ToDouble(p.Attributes["y"].Value);
+
+                                facePoints.Add(new PointF(x, y));
+                            }
+
+                            faces.Add(new Face(facePoints, new PointF(xTilt, yTilt), color));
+                        }
+                        plane.assets.Add(new Asset(faces));
+                    }
                     foreach (XmlNode f in pl.SelectNodes("CollisionPolygon"))
                     {
                         //For each point inside the Polygon
@@ -886,7 +927,7 @@ namespace Faces
                     {
                         if (po.id == "Player")
                         {
-                            po.body.Location = new Point((int)cursorPos.X, (int)cursorPos.Y);
+                            po.body.Location = new Point((int)(cursorPos.X + movementPoint.X), (int)(cursorPos.Y + movementPoint.Y));
                         }
                     }
                     break;
@@ -896,6 +937,38 @@ namespace Faces
                         ySpeed = (ySpeed > 5) ? ySpeed : 5;
                     }
                     break;
+                case Keys.Escape:
+                    foreach (Asset a in planes[planeDepth].assets)
+                    {
+                        a.selected = false;
+                    }
+                    break;
+                case Keys.V: //Scale
+                    PointF scalePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                    foreach (Plane pl in planes)
+                    {
+                        foreach (Asset a in pl.assets)
+                        {
+                            if (a.selected)
+                            {
+                                a.ScaleFaces(selectionPointOne, scalePoint);
+                            }
+                        }
+                    }
+                    break;
+                case Keys.F: //Rotate
+                    PointF rotatePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                    foreach (Plane pl in planes)
+                    {
+                        foreach (Asset a in pl.assets)
+                        {
+                            if (a.selected)
+                            {
+                                a.RotateFaces(selectionPointOne, rotatePoint);
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
@@ -903,6 +976,23 @@ namespace Faces
         {
             additionType = "Screen Bounds";
             additionTypeCheck();
+        }
+
+        PointF paralaxThisPoint(PointF initialPoint, float depth)
+        {
+            PointF newPoint = initialPoint;
+
+            //Tilt the camera depending on the cursors location
+            float xDif = (paralaxCursorPoint.X - this.Width / 2);
+            float yDif = (paralaxCursorPoint.Y - this.Height / 2);
+            newPoint.X -= xDif + ((depth - 0) * xDif / 4);
+            newPoint.Y -= yDif + ((depth - 0) * yDif / 4);
+
+            //Move the camera to follow the player, use a bit of paralaxing
+            newPoint.X -= (paralaxPoint.X - this.Width / 2) / (depth + 1);
+            newPoint.Y -= (paralaxPoint.Y - this.Height / 2) / (depth + 1);
+
+            return newPoint;
         }
     }
 }

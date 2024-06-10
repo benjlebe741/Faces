@@ -28,7 +28,7 @@ namespace Faces
             body = pastBody = _body;
             id = _id;
         }
-    
+
         public void Move(List<PointF[]> polygons)
         {
             LevelCreator.airBorn = true;
@@ -51,9 +51,9 @@ namespace Faces
             #endregion
 
             collisionChecks(polygons);
-            
+
             int speed = 8;
-            //body.Y += (LevelCreator.WSAD[0]) ? -speed : 0;
+            body.Y += (LevelCreator.WSAD[0]) ? -speed : 0;
             body.Y += (LevelCreator.WSAD[1]) ? speed : 0;
             body.X += (LevelCreator.WSAD[2]) ? -speed : 0;
             body.X += (LevelCreator.WSAD[3]) ? speed : 0;
@@ -153,27 +153,33 @@ namespace Faces
                         #endregion
                     }
                 }
+            }
 
-                int count = (int)((Math.Abs(deltaX) > Math.Abs(deltaY)) ? Math.Abs(deltaX) : Math.Abs(deltaY));
-                while (intersection)
+            int count = (int)((Math.Abs(deltaX) > Math.Abs(deltaY)) ? Math.Abs(deltaX) : Math.Abs(deltaY));
+            //If no change can be made, go to previous position
+            if (xDirectionChange == 0 && yDirectionChange == 0) { body.Location = pastBody.Location; intersection = false; }
+            //Otherwise gradually move the player back towards their previous position until they reach it
+            while (intersection)
+            {
+                count--;
+                if (count <= 0)
                 {
-                    count--;
-                    if (count <= 0)
-                    {
-                        body.Location = pastBody.Location;
-                        break;
-                    }
-                    intersection = false;
+                    body.Location = pastBody.Location;
+                    break;
+                }
+                intersection = false;
 
-                    body.X += (int)xDirectionChange;
-                    body.Y += (int)yDirectionChange;
+                body.X += (int)xDirectionChange;
+                body.Y += (int)yDirectionChange;
+                foreach (PointF[] polygon in polygons)
+                {
                     for (int p = 0; p < polygon.Length; p++)
                     {
                         Point pOne = new Point((int)polygon[p].X, (int)polygon[p].Y);
                         PointF pTwoTemp = (p + 1 >= polygon.Length) ? polygon[0] : polygon[p + 1];
                         Point pTwo = new Point((int)(pTwoTemp.X), (int)(pTwoTemp.Y));
 
-                        if (lineIntersects(pOne,pTwo, body, pastBody, false)) //If there is an intersection
+                        if (lineIntersects(pOne, pTwo, body, pastBody, false)) //If there is an intersection
                         {
                             intersection = true;
                         }
@@ -181,6 +187,7 @@ namespace Faces
                 }
             }
         }
+
 
         bool lineIntersects(Point _pOne, Point _pTwo, Rectangle _rect, Rectangle _pastRect, bool move)
         {

@@ -197,7 +197,7 @@
             this.scaleLabel5.Name = "scaleLabel5";
             this.scaleLabel5.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel5.TabIndex = 32;
-            this.scaleLabel5.Text = "s: scale";
+            this.scaleLabel5.Text = "v: scale";
             this.scaleLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SelectMode
