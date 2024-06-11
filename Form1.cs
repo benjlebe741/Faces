@@ -26,6 +26,9 @@ namespace Faces
         public Form1()
         {
             InitializeComponent();
+            this.Location = new Point(0, 0);
+
+            this.Size = Screen.PrimaryScreen.WorkingArea.Size;
             ChangeScreen(this, new MenuScreen());
             primaryLights.Add(new Light(Color.FromArgb(255, 150, 200, 10), cursorPos));
         }

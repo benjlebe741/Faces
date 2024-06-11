@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Faces
 {
@@ -40,17 +41,87 @@ namespace Faces
 
         public void ScaleFaces(PointF aboutPoint, PointF toPoint)
         {
-
+            foreach (Face face in faces)
+            {
+                for (int p = 0; p < face.points.Count; p++)
+                {
+                    face.points[p] = ScalePoint(aboutPoint, (float)0.1, face.points[p]);
+                }
+            }
         }
 
-        public void RotateFaces(PointF aboutPoint, PointF toPoint)
+        public void RotateFaces(PointF aboutPoint)
         {
+            foreach (Face face in faces)
+            {
+                for (int p = 0; p < face.points.Count; p++)
+                {
+                    face.points[p] = RotatePoint(aboutPoint, 0.3, face.points[p]);
+                }
+            }
+        }
 
+        PointF RotatePoint(PointF pivot, double angleInRads, PointF p)
+        {
+            float s = (float)Math.Sin(angleInRads);
+            float c = (float)Math.Cos(angleInRads);
+
+            // translate point back to origin:
+            p.X -= pivot.X;
+            p.Y -= pivot.Y;
+
+            // rotate point
+            float xnew = p.X * c - p.Y * s;
+            float ynew = p.X * s + p.Y * c;
+
+            // translate point back:
+            p.X = xnew + pivot.X;
+            p.Y = ynew + pivot.Y;
+
+            return p;
+        }
+
+        PointF ScalePoint(PointF pivot, float scaleFactor, PointF p)
+        {
+            p.X = (p.X - pivot.X) * (scaleFactor + pivot.X);
+            p.Y = (p.Y - pivot.Y) * (scaleFactor + pivot.Y);
+
+            return p;
+        }
+
+        public void TranslateFaces(PointF aboutPoint, PointF toPoint)
+        {
+            float xDif = aboutPoint.X - toPoint.X;
+            float yDif = aboutPoint.Y - toPoint.Y;
+
+            foreach (Face face in faces)
+            {
+                for (int p = 0; p < face.points.Count; p++)
+                {
+                    float newX = face.points[p].X - xDif;
+                    float newY = face.points[p].Y - yDif;
+
+                    face.points[p] = new PointF(newX, newY);
+                }
+            }
         }
 
         public void ColorFaces(Color recolor, float percentage)
         {
+            foreach (Face f in faces)
+            {
+                float r = (percentage * recolor.R) + ((1 - percentage) * f.initialColor.R);
+                float g = (percentage * recolor.G) + ((1 - percentage) * f.initialColor.G);
+                float b = (percentage * recolor.B) + ((1 - percentage) * f.initialColor.B);
+                r = ((r < 0) ? 0 : r);
+                r = ((r > 255) ? 255 : r);
+                g = ((g < 0) ? 0 : g);
+                g = ((g > 255) ? 255 : g);
+                b = ((b < 0) ? 0 : b);
+                b = ((b > 255) ? 255 : b);
 
+                f.initialColor = Color.FromArgb((int)r, (int)g, (int)b);
+            }
         }
     }
 }

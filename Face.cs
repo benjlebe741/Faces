@@ -156,7 +156,7 @@ namespace Faces
             bList.Reverse();
 
             //Take only the brightest value, and return it.
-            return Color.FromArgb(initialColor.A,rList[0], gList[0], bList[0]);
+            return Color.FromArgb(255,rList[0], gList[0], bList[0]);
         }
         #endregion
 

@@ -195,9 +195,9 @@
             this.scaleLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.scaleLabel5.Location = new System.Drawing.Point(1394, 268);
             this.scaleLabel5.Name = "scaleLabel5";
-            this.scaleLabel5.Size = new System.Drawing.Size(118, 23);
+            this.scaleLabel5.Size = new System.Drawing.Size(118, 50);
             this.scaleLabel5.TabIndex = 32;
-            this.scaleLabel5.Text = "v: scale";
+            this.scaleLabel5.Text = "v: scale m: move";
             this.scaleLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SelectMode
@@ -221,7 +221,7 @@
             // 
             this.scaleLabel6.BackColor = System.Drawing.Color.RosyBrown;
             this.scaleLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.scaleLabel6.Location = new System.Drawing.Point(1394, 297);
+            this.scaleLabel6.Location = new System.Drawing.Point(1393, 327);
             this.scaleLabel6.Name = "scaleLabel6";
             this.scaleLabel6.Size = new System.Drawing.Size(118, 23);
             this.scaleLabel6.TabIndex = 34;

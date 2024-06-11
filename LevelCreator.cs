@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Faces
 {
@@ -221,14 +213,13 @@ namespace Faces
                         {
                             if (a.selected)
                             {
-                                a.ColorFaces(cursorColor, cursorColor.A / 255);
+                                a.ColorFaces(cursorColor, (float)determineColor.R / (float)255);
                             }
                         }
                     }
                     break;
-                case Keys.V:
-                case Keys.F:
-                    selectionPointOne = new PointF(selectionPointOne.X + movementPoint.X, selectionPointOne.Y + movementPoint.Y);
+                case Keys.Z:
+                    selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
                     break;
                 case Keys.Y:
                     planes[planeDepth].primaryLights.Add(new Light(cursorColor, cursorPos));
@@ -356,8 +347,6 @@ namespace Faces
                 }
                 planes[planeDepth].assets.Add(new Asset(faces));
             }
-
-
         }
 
         private void LevelCreator_Paint(object sender, PaintEventArgs e)
@@ -955,6 +944,7 @@ namespace Faces
                             }
                         }
                     }
+                    selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
                     break;
                 case Keys.F: //Rotate
                     PointF rotatePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
@@ -964,8 +954,51 @@ namespace Faces
                         {
                             if (a.selected)
                             {
-                                a.RotateFaces(selectionPointOne, rotatePoint);
+                                a.RotateFaces(rotatePoint);
                             }
+                        }
+                    }
+                    break;
+                case Keys.M: //Translate
+                    PointF movePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                    foreach (Plane pl in planes)
+                    {
+                        foreach (Asset a in pl.assets)
+                        {
+                            if (a.selected)
+                            {
+                                a.TranslateFaces(selectionPointOne, movePoint);
+                            }
+                        }
+                    }
+                    selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                    break;
+                case Keys.C: //Color
+                    foreach (Plane pl in planes)
+                    {
+                        foreach (Asset a in pl.assets)
+                        {
+                            if (a.selected)
+                            {
+                                a.ColorFaces(cursorColor, determineColor.A / 255);
+                            }
+                        }
+                    }
+                    break;
+                case Keys.Delete: //Delete
+                    foreach (Plane pl in planes)
+                    {
+                        List<Asset> removeThese = new List<Asset>();
+                        foreach (Asset a in pl.assets)
+                        {
+                            if (a.selected)
+                            {
+                                removeThese.Add(a);
+                            }
+                        }
+                        for (int r = 0; r < removeThese.Count; r++)
+                        {
+                            pl.assets.Remove(removeThese[r]);
                         }
                     }
                     break;
