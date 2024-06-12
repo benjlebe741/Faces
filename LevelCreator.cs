@@ -28,7 +28,6 @@ namespace Faces
         PointF cornerOne = new PointF();
         PointF cornerTwo = new PointF();
 
-
         //Lighting
         bool lighting = false;
         bool surfaceLights = true;
@@ -51,6 +50,12 @@ namespace Faces
         string regionDepth = "Not Set";
         string additionType = "Not Set";
         bool outline = true;
+
+        //Selections
+        bool shiftPressed = false;
+        bool ctrlPressed = false;
+        string selectionOption = "Not Set";
+
         public LevelCreator()
         {
             InitializeComponent();
@@ -144,7 +149,57 @@ namespace Faces
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            label1.Text = "" + planes[planeDepth].assets.Count;
+            #region Selecting
+            if (mode == "SelectMode")
+            {
+                switch (selectionOption)
+                {
+                    case "Scale": //Scale
+                        PointF scalePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                        foreach (Plane pl in planes)
+                        {
+                            foreach (Asset a in pl.assets)
+                            {
+                                if (a.selected)
+                                {
+                                    float scaleFactor = (float)1 + (float)(0.02 * ((shiftPressed) ? 1 : -1));
+                                    a.ScaleFaces(selectionPointOne, scalePoint, (ctrlPressed) ? 1 : scaleFactor, (ctrlPressed) ? (float)0.05 * ((shiftPressed) ? 1 : -1) : 0);
+                                }
+                            }
+                        }
+                        break;
+                    case "Rotate": //Rotate
+                        foreach (Plane pl in planes)
+                        {
+                            foreach (Asset a in pl.assets)
+                            {
+                                if (a.selected)
+                                {
+                                    a.RotateFaces(selectionPointOne, ((ctrlPressed) ? (float)Math.PI / 2 : (float)0.04) * ((shiftPressed) ? 1 : -1));
+                                }
+                            }
+                        }
+                        selectionOption = (ctrlPressed) ? "Not Set" : "Rotate";
+                        break;
+                    case "Move": //Translate
+                        PointF movePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                        foreach (Plane pl in planes)
+                        {
+                            foreach (Asset a in pl.assets)
+                            {
+                                if (a.selected)
+                                {
+                                    a.TranslateFaces(selectionPointOne, movePoint);
+                                }
+                            }
+                        }
+                        selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                        break;
+                }
+            }
+            #endregion
+
+            label1.Text = "" + shiftPressed;
 
             float xTilt = (desiredParalaxPoint.X - paralaxPoint.X) / 2;
             float yTilt = (desiredParalaxPoint.Y - 100 - paralaxPoint.Y) / 2;
@@ -206,6 +261,12 @@ namespace Faces
             int moveSpeed = 8;
             switch (e.KeyCode)
             {
+                case Keys.ShiftKey:
+                    shiftPressed = true;
+                    break;
+                case Keys.ControlKey:
+                    ctrlPressed = !ctrlPressed;
+                    break;
                 case Keys.C:
                     foreach (Plane pl in planes)
                     {
@@ -218,7 +279,19 @@ namespace Faces
                         }
                     }
                     break;
-                case Keys.Z:
+                case Keys.M:
+                    selectionOption = (selectionOption == "Move") ? "Not Set" : "Move";
+                    selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                    break;
+                case Keys.Enter:
+                    selectionOption = "Not Set";
+                    break;
+                case Keys.V:
+                    selectionOption = (selectionOption == "Scale") ? "Not Set" : "Scale";
+                    selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
+                    break;
+                case Keys.F:
+                    selectionOption = (selectionOption == "Rotate") ? "Not Set" : "Rotate";
                     selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
                     break;
                 case Keys.Y:
@@ -911,6 +984,9 @@ namespace Faces
                 case Keys.D:
                     WSAD[3] = false;
                     break;
+                case Keys.ShiftKey:
+                    shiftPressed = false;
+                    break;
                 case Keys.X:
                     foreach (PhysicsObject po in planes[playerPlaneDepth].physicsObjects)
                     {
@@ -927,51 +1003,13 @@ namespace Faces
                     }
                     break;
                 case Keys.Escape:
-                    foreach (Asset a in planes[planeDepth].assets)
-                    {
-                        a.selected = false;
-                    }
-                    break;
-                case Keys.V: //Scale
-                    PointF scalePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
                     foreach (Plane pl in planes)
                     {
-                        foreach (Asset a in pl.assets)
+                        foreach (Asset a in planes[planeDepth].assets)
                         {
-                            if (a.selected)
-                            {
-                                a.ScaleFaces(selectionPointOne, scalePoint);
-                            }
+                            a.selected = false;
                         }
                     }
-                    selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
-                    break;
-                case Keys.F: //Rotate
-                    PointF rotatePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
-                    foreach (Plane pl in planes)
-                    {
-                        foreach (Asset a in pl.assets)
-                        {
-                            if (a.selected)
-                            {
-                                a.RotateFaces(rotatePoint);
-                            }
-                        }
-                    }
-                    break;
-                case Keys.M: //Translate
-                    PointF movePoint = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
-                    foreach (Plane pl in planes)
-                    {
-                        foreach (Asset a in pl.assets)
-                        {
-                            if (a.selected)
-                            {
-                                a.TranslateFaces(selectionPointOne, movePoint);
-                            }
-                        }
-                    }
-                    selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
                     break;
                 case Keys.C: //Color
                     foreach (Plane pl in planes)
@@ -1001,6 +1039,10 @@ namespace Faces
                             pl.assets.Remove(removeThese[r]);
                         }
                     }
+                    break;
+                case Keys.V:
+                case Keys.F:
+                    selectionOption = "Not Selected";
                     break;
             }
         }

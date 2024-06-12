@@ -39,24 +39,24 @@ namespace Faces
             selected = (_selected) ? !selected : selected;
         }
 
-        public void ScaleFaces(PointF aboutPoint, PointF toPoint)
+        public void ScaleFaces(PointF aboutPoint, PointF toPoint, float scaleFactor, float uniformScaling)
         {
             foreach (Face face in faces)
             {
                 for (int p = 0; p < face.points.Count; p++)
                 {
-                    face.points[p] = ScalePoint(aboutPoint, (float)0.1, face.points[p]);
+                    face.points[p] = ScalePoint(aboutPoint, scaleFactor, face.points[p], uniformScaling);
                 }
             }
         }
 
-        public void RotateFaces(PointF aboutPoint)
+        public void RotateFaces(PointF aboutPoint, float angle)
         {
             foreach (Face face in faces)
             {
                 for (int p = 0; p < face.points.Count; p++)
                 {
-                    face.points[p] = RotatePoint(aboutPoint, 0.3, face.points[p]);
+                    face.points[p] = RotatePoint(aboutPoint, angle, face.points[p]);
                 }
             }
         }
@@ -81,10 +81,10 @@ namespace Faces
             return p;
         }
 
-        PointF ScalePoint(PointF pivot, float scaleFactor, PointF p)
+        PointF ScalePoint(PointF pivot, float scaleFactor, PointF p, float uniformity)
         {
-            p.X = (p.X - pivot.X) * (scaleFactor + pivot.X);
-            p.Y = (p.Y - pivot.Y) * (scaleFactor + pivot.Y);
+            p.X = (p.X - pivot.X) * (scaleFactor + (scaleFactor * uniformity)) + pivot.X;
+            p.Y = (p.Y - pivot.Y) * (scaleFactor - (scaleFactor * uniformity)) + pivot.Y;
 
             return p;
         }
