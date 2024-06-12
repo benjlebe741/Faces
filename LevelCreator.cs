@@ -466,7 +466,7 @@ namespace Faces
                         }
                         if (a.selected)
                         {
-                            e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.White), 2), _points);
+                            e.Graphics.DrawPolygon(new Pen(new SolidBrush((ctrlPressed) ? Color.Cyan : Color.White), 2), _points);
                         }
                     }
                 }
