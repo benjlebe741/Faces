@@ -20,6 +20,26 @@ namespace Faces
         {
             faces = _faces;
         }
+        public Asset(Asset anotherAsset)
+        {
+            List<Face> _faces = new List<Face>();
+            foreach (Face f in anotherAsset.faces)
+            {
+                List<PointF> _points = new List<PointF>();
+                foreach (PointF p in f.points)
+                {
+                    _points.Add(new PointF(p.X,p.Y));
+                };
+                float _horizontalTilt = f.horizontalTilt;
+                float _verticalTilt = f.verticalTilt;
+                Color _color = Color.FromArgb(f.initialColor.A, f.initialColor.R, f.initialColor.G, f.initialColor.B);
+
+                Face _face = new Face(_points, _horizontalTilt, _verticalTilt, _color);
+                _faces.Add(_face);
+            }
+
+            faces = _faces;
+        }
 
         public void SelectAsset(PointF selectionPoint)
         {
@@ -47,6 +67,8 @@ namespace Faces
                 {
                     face.points[p] = ScalePoint(aboutPoint, scaleFactor, face.points[p], uniformScaling);
                 }
+                face.receiver = ScalePoint(aboutPoint, scaleFactor, face.receiver, uniformScaling);
+                face.tiltedReciever = ScalePoint(aboutPoint, scaleFactor, face.tiltedReciever, uniformScaling);
             }
         }
 
@@ -58,6 +80,8 @@ namespace Faces
                 {
                     face.points[p] = RotatePoint(aboutPoint, angle, face.points[p]);
                 }
+                face.receiver = RotatePoint(aboutPoint, angle, face.receiver);
+                face.tiltedReciever = RotatePoint(aboutPoint, angle, face.tiltedReciever);
             }
         }
 
@@ -98,11 +122,10 @@ namespace Faces
             {
                 for (int p = 0; p < face.points.Count; p++)
                 {
-                    float newX = face.points[p].X - xDif;
-                    float newY = face.points[p].Y - yDif;
-
-                    face.points[p] = new PointF(newX, newY);
+                    face.points[p] = new PointF(face.points[p].X - xDif, face.points[p].Y - yDif);
                 }
+                face.receiver = new PointF(face.receiver.X - xDif, face.receiver.Y - yDif);
+                face.tiltedReciever = new PointF(face.tiltedReciever.X - xDif, face.tiltedReciever.Y - yDif);
             }
         }
 

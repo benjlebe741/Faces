@@ -55,6 +55,7 @@ namespace Faces
         bool shiftPressed = false;
         bool ctrlPressed = false;
         string selectionOption = "Not Set";
+        List<Asset> duplicationList = new List<Asset>();
 
         public LevelCreator()
         {
@@ -195,6 +196,52 @@ namespace Faces
                         }
                         selectionPointOne = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
                         break;
+                    case "ColorCopy":
+                        if (!ctrlPressed && !shiftPressed)
+                        {
+                            foreach (Plane pl in planes)
+                            {
+                                foreach (Asset a in pl.assets)
+                                {
+                                    if (a.selected)
+                                    {
+                                        a.ColorFaces(cursorColor, (float)determineColor.R / (float)255);
+                                    }
+                                }
+                            }
+                            selectionOption = "Not Set";
+                        }
+
+                        //Duplicating Selection
+                        else if (!shiftPressed)
+                        {
+                            duplicationList.Clear();
+                            foreach (Plane pl in planes)
+                            {
+                                foreach (Asset a in pl.assets)
+                                {
+                                    if (a.selected)
+                                    {
+                                        Asset b = new Asset(a);
+                                        duplicationList.Add(b);
+                                    }
+                                }
+                            }
+                            ctrlPressed = false;
+                            selectionOption = "Not Set";
+                        }
+                        else
+                        {
+                            //Pasting Copied Selection
+                            foreach (Asset a in duplicationList)
+                            {
+                                Asset b = new Asset(a);
+                                planes[planeDepth].assets.Add(b);
+                            }
+                            selectionOption = "Not Set";
+                        }
+
+                        break;
                 }
             }
             #endregion
@@ -268,13 +315,16 @@ namespace Faces
                     ctrlPressed = !ctrlPressed;
                     break;
                 case Keys.C:
+                    selectionOption = (selectionOption == "ColorCopy") ? "Not Set" : "ColorCopy";
+                    break;
+                case Keys.N:
                     foreach (Plane pl in planes)
                     {
                         foreach (Asset a in pl.assets)
                         {
                             if (a.selected)
                             {
-                                a.ColorFaces(cursorColor, (float)determineColor.R / (float)255);
+                                a.depthBoost += (float)0.1 * ((shiftPressed) ? -1 : 1);
                             }
                         }
                     }
@@ -687,6 +737,7 @@ namespace Faces
                                 PointF _point = new PointF(cursorPos.X + movementPoint.X, cursorPos.Y + movementPoint.Y);
                                 if (paralax) { _point = paralaxThisPoint(cursorPos, planeDepth); }
                                 a.SelectAsset(_point);
+                                if (a.selected) { break; }
                             }
                             break;
                     }
@@ -757,7 +808,7 @@ namespace Faces
                 foreach (Asset a in pl.assets)
                 {
                     XmlElement asset = doc.CreateElement("Asset");
-
+                    asset.SetAttribute("DepthBoost", "" + a.depthBoost);
                     foreach (Face f in a.faces)
                     {
                         XmlElement face = doc.CreateElement("Face");
@@ -902,7 +953,12 @@ namespace Faces
 
                             faces.Add(new Face(facePoints, new PointF(xTilt, yTilt), color));
                         }
-                        plane.assets.Add(new Asset(faces));
+                        Asset _asset = new Asset(faces);
+                        if (a.Attributes.Count > 0)
+                        {
+                            _asset.depthBoost = (float)Convert.ToDouble(a.Attributes["DepthBoost"].Value);
+                        }
+                        plane.assets.Add(_asset);
                     }
                     foreach (XmlNode f in pl.SelectNodes("CollisionPolygon"))
                     {
@@ -1008,18 +1064,6 @@ namespace Faces
                         foreach (Asset a in planes[planeDepth].assets)
                         {
                             a.selected = false;
-                        }
-                    }
-                    break;
-                case Keys.C: //Color
-                    foreach (Plane pl in planes)
-                    {
-                        foreach (Asset a in pl.assets)
-                        {
-                            if (a.selected)
-                            {
-                                a.ColorFaces(cursorColor, determineColor.A / 255);
-                            }
                         }
                     }
                     break;
