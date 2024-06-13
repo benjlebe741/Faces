@@ -472,6 +472,17 @@ namespace Faces
             }
         }
 
+        bool OnScreen(bool onScreen, PointF pointF)
+        {
+            //If this face is already on screen, continue
+            if (onScreen) { return onScreen; }
+            //If not, check to see if this point IS
+            Rectangle screenRect = new Rectangle(0,0,this.Width,this.Height);
+            bool pointIsInsideScreen = screenRect.Contains((int)pointF.X,(int)pointF.Y);
+            onScreen = (pointIsInsideScreen) ? true : false;
+            return onScreen;
+        }
+
         private void LevelCreator_Paint(object sender, PaintEventArgs e)
         {
             float posPlaneDepth = planes.Count;
@@ -488,12 +499,14 @@ namespace Faces
                 {
                     foreach (Face f in a.faces)
                     {
+                        bool onScreen = false;
                         PointF[] _points = f.points.ToArray();
                         if (paralax)
                         {
                             for (int p = 0; p < _points.Length; p++)
                             {
                                 _points[p] = paralaxThisPoint(_points[p], posPlaneDepth + a.depthBoost);
+                                onScreen = OnScreen(onScreen, _points[p]);
                             }
                         }
                         else
@@ -502,8 +515,51 @@ namespace Faces
                             {
                                 _points[p].X -= movementPoint.X;
                                 _points[p].Y -= movementPoint.Y;
+                                onScreen = OnScreen(onScreen, _points[p]);
                             }
                         }
+                        if (onScreen)
+                        {
+                            Color color = f.initialColor;
+                            if (lighting)
+                            {
+                                color = f.colorValue(plane.lights, posPlaneDepth / planes.Count, backgroundColor);
+                            }
+                            e.Graphics.FillPolygon(new SolidBrush(color), _points);
+                            if (outline && plane == planes[planeDepth])
+                            {
+                                e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Pink)), _points);
+                            }
+                            if (a.selected)
+                            {
+                                e.Graphics.DrawPolygon(new Pen(new SolidBrush((ctrlPressed) ? Color.Cyan : Color.White), 2), _points);
+                            }
+                        }
+                    }
+                }
+                foreach (Face f in plane.faces)
+                {
+                    bool onScreen = false;
+                    PointF[] _points = f.points.ToArray();
+                    if (paralax)
+                    {
+                        for (int p = 0; p < _points.Length; p++)
+                        {
+                            _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
+                            onScreen = OnScreen(onScreen, _points[p]);
+                        }
+                    }
+                    else
+                    {
+                        for (int p = 0; p < _points.Length; p++)
+                        {
+                            _points[p].X -= movementPoint.X;
+                            _points[p].Y -= movementPoint.Y;
+                            onScreen = OnScreen(onScreen, _points[p]);
+                        }
+                    }
+                    if (onScreen)
+                    {
                         Color color = f.initialColor;
                         if (lighting)
                         {
@@ -514,44 +570,12 @@ namespace Faces
                         {
                             e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Pink)), _points);
                         }
-                        if (a.selected)
-                        {
-                            e.Graphics.DrawPolygon(new Pen(new SolidBrush((ctrlPressed) ? Color.Cyan : Color.White), 2), _points);
-                        }
-                    }
-                }
-                foreach (Face f in plane.faces)
-                {
-                    PointF[] _points = f.points.ToArray();
-                    if (paralax)
-                    {
-                        for (int p = 0; p < _points.Length; p++)
-                        {
-                            _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
-                        }
-                    }
-                    else
-                    {
-                        for (int p = 0; p < _points.Length; p++)
-                        {
-                            _points[p].X -= movementPoint.X;
-                            _points[p].Y -= movementPoint.Y;
-                        }
-                    }
-                    Color color = f.initialColor;
-                    if (lighting)
-                    {
-                        color = f.colorValue(plane.lights, posPlaneDepth / planes.Count, backgroundColor);
-                    }
-                    e.Graphics.FillPolygon(new SolidBrush(color), _points);
-                    if (outline && plane == planes[planeDepth])
-                    {
-                        e.Graphics.DrawPolygon(new Pen(new SolidBrush(Color.Pink)), _points);
                     }
                 }
 
                 foreach (PhysicsObject po in plane.physicsObjects)
                 {
+                    bool onScreen = false;
                     PointF[] _points = new PointF[4]
                     {
                         new PointF(po.body.X,po.body.Y ),
@@ -564,6 +588,7 @@ namespace Faces
                         for (int p = 0; p < _points.Length; p++)
                         {
                             _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
+                            onScreen = OnScreen(onScreen, _points[p]);
                         }
                     }
                     else
@@ -572,10 +597,14 @@ namespace Faces
                         {
                             _points[p].X -= movementPoint.X;
                             _points[p].Y -= movementPoint.Y;
+                            onScreen = OnScreen(onScreen, _points[p]);
                         }
                     }
-                    Color color = Color.LimeGreen;
-                    e.Graphics.FillPolygon(new SolidBrush(color), _points);
+                    if (onScreen)
+                    {
+                        Color color = Color.LimeGreen;
+                        e.Graphics.FillPolygon(new SolidBrush(color), _points);
+                    }
                 }
             }
             #region Show Collision Lines
