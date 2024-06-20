@@ -12,10 +12,11 @@ using System.Xml;
 
 namespace Faces
 {
-    public partial class AssetCreator : UserControl
+    public partial class helpTextLabel6 : UserControl
     {
         int currentAsset = 0;
         bool lighting = false;
+        bool helpText = true;
         bool surfaceLights = true;
         List<Face> faces = new List<Face>();
 
@@ -38,18 +39,25 @@ namespace Faces
         PointF cornerOne = new PointF();
         PointF cornerTwo = new PointF();
 
-        public AssetCreator()
+        public helpTextLabel6()
         {
             InitializeComponent();
             primaryLights.Add(new Light(Color.White, new PointF(0, 0)));
             checkAsset();
+            checkCreateMode();
+            checkHelpText();
         }
 
+        Color inverseColor(Color color) 
+        {
+            return Color.FromArgb(255, 255 - color.R, 255 - color.G, 255 - color.B);
+        }
         private void timer1_Tick(object sender, EventArgs e)
         {
             cursorPos = PointToClient(Cursor.Position);
             currentAssetLabel.Text = "" + currentAsset;
 
+            //Current and Next Color
             determineNextColor();
             currentColor.BackColor = cursorColor;
             nextColor.BackColor = determineColor;
@@ -61,7 +69,7 @@ namespace Faces
             lights.AddRange(primaryLights);
             foreach (Face f in faces)
             {
-                Color color = f.colorValue(lights,0,Color.Black);
+                Color color = f.colorValue(lights, 0, Color.Black);
                 secondaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
             }
 
@@ -72,7 +80,7 @@ namespace Faces
                 lights.AddRange(secondaryLights);
                 foreach (Face f in faces)
                 {
-                    Color color = f.colorValue(lights,0, Color.Black);
+                    Color color = f.colorValue(lights, 0, Color.Black);
                     tertiaryLights.Add(new Light(color, new PointF(f.tiltedReciever.X + f.horizontalTilt, f.tiltedReciever.Y + f.verticalTilt)));
                 }
 
@@ -87,7 +95,7 @@ namespace Faces
             float percentage = (totalXdifference - cursorPos.X) / totalXdifference;
             percentage = (percentage < 0) ? 0 : percentage;
             percentage = (percentage > 1) ? 1 : percentage;
-            determineColor = Color.FromArgb((int)(percentage * (float)255), (int)(percentage * (float)255), (int)(percentage * (float)255), (int)(percentage * (float)255));
+            determineColor = Color.FromArgb(255, (int)(percentage * (float)255), (int)(percentage * (float)255), (int)(percentage * (float)255));
         }
 
         private void AssetCreator_Paint(object sender, PaintEventArgs e)
@@ -97,7 +105,7 @@ namespace Faces
             {
                 foreach (Face f in faces)
                 {
-                    Color color = f.colorValue(lights,0, Color.Black);
+                    Color color = f.colorValue(lights, 0, Color.Black);
                     e.Graphics.FillPolygon(new SolidBrush(color), f.points.ToArray());
                 }
             }
@@ -114,16 +122,26 @@ namespace Faces
                 }
             }
 
-            //Show the current Points that are NOT faces YET
             SolidBrush brush = new SolidBrush(Color.FromArgb(205, 255, 0, 255));
-            if (points.Count > 2)
-            {
-                e.Graphics.FillPolygon(brush, points.ToArray());
-            }
+            //Show the current Points that are NOT faces YET
+            float recieverX = 0;
+            float recieverY = 0;
             foreach (PointF p in points)
             {
                 e.Graphics.FillEllipse(brush, new Rectangle((int)p.X - 4, (int)p.Y - 4, 8, 8));
+                recieverX += p.X;
+                recieverY += p.Y;
             }
+            recieverX /= points.Count;
+            recieverY /= points.Count;
+            //SolidBrush brush = new SolidBrush(Color.FromArgb(205, 255, 0, 255));
+            if (points.Count > 2)
+            {
+                e.Graphics.FillPolygon(brush, points.ToArray());
+                PointF recieverPoint = new PointF(recieverX, recieverY);
+                e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Pink)), recieverPoint, cursorPos);
+            }
+
         }
 
         private void AssetCreator_MouseClick(object sender, MouseEventArgs e)
@@ -188,6 +206,12 @@ namespace Faces
         {
             //Toggle Lights
             lighting = !lighting;
+            lightingCheck();
+        }
+
+        void lightingCheck()
+        {
+            label2.BackColor = (lighting) ? Color.White : Color.LightGray;
         }
 
         private void AssetCreator_Load(object sender, EventArgs e)
@@ -309,15 +333,29 @@ namespace Faces
         private void PolygoneMode_Click(object sender, EventArgs e)
         {
             createMode = "Polygons";
-            PolygoneMode.BackColor = Color.White;
-            RectangleMode.BackColor = Color.LightGray;
+            checkCreateMode();
         }
 
         private void RectangleMode_Click(object sender, EventArgs e)
         {
             createMode = "Rectangles";
-            RectangleMode.BackColor = Color.White;
-            PolygoneMode.BackColor = Color.LightGray;
+            checkCreateMode();
+        }
+
+        void checkCreateMode()
+        {
+            if (createMode == "Rectangles")
+            {
+                RectangleMode.BackColor = Color.White;
+                PolygoneMode.BackColor = Color.LightGray;
+                helpTextLabel.Text = "Click and drag for rectangle! Space to confirm!\n(Cursor position = lighting direction)";
+            }
+            else if (createMode == "Polygons")
+            {
+                PolygoneMode.BackColor = Color.White;
+                RectangleMode.BackColor = Color.LightGray;
+                helpTextLabel.Text = "Click to add points! Space to confirm!\n(Cursor position = lighting direction)";
+            }
         }
 
         private void AssetCreator_MouseUp(object sender, MouseEventArgs e)
@@ -336,6 +374,7 @@ namespace Faces
         {
             if (createMode == "Rectangles")
             {
+                points.Clear();
                 cornerOne = cursorPos;
             }
         }
@@ -344,6 +383,18 @@ namespace Faces
         {
             surfaceLights = !surfaceLights;
             label3.BackColor = (surfaceLights) ? Color.White : Color.LightGray;
+        }
+
+        private void toggleHelpLabel_Click(object sender, EventArgs e)
+        {
+            helpText = !helpText;
+            checkHelpText();
+        }
+
+        void checkHelpText()
+        {
+            toggleHelpLabel.BackColor = (helpText) ? Color.White : Color.LightGray;
+            helpTextLabel.Visible = helpTextLabel2.Visible = helpTextLabel3.Visible = helpTextLabel4.Visible = helpTextLabel5.Visible = helpTextLabel7.Visible = helpTextLabel8.Visible = (helpText);
         }
     }
 }

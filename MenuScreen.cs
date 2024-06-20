@@ -19,7 +19,7 @@ namespace Faces
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form1.ChangeScreen(this, new AssetCreator());
+            Form1.ChangeScreen(this, new helpTextLabel6());
         }
 
         private void button2_Click(object sender, EventArgs e)
