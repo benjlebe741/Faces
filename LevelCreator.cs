@@ -709,7 +709,7 @@ namespace Faces
                 ghostCursorPoint = paralaxThisPoint(cursorPos, planeDepth);
                 ghostCursorPoint = paralaxThisPoint(cursorPos, planeDepth);
             }
-            e.Graphics.FillEllipse(new SolidBrush(Color.DarkGoldenrod), new Rectangle((int)ghostCursorPoint.X - 3, (int)ghostCursorPoint.Y - 3, 8, 8));
+            //e.Graphics.FillEllipse(new SolidBrush(Color.DarkGoldenrod), new Rectangle((int)ghostCursorPoint.X - 3, (int)ghostCursorPoint.Y - 3, 8, 8));
 
         }
 
@@ -1153,11 +1153,11 @@ namespace Faces
         {
             PointF newPoint = initialPoint;
 
-            //Tilt the camera depending on the cursors location
+            //Tilt the camera depending on the perspective-shift-location
             float xDif = (paralaxCursorPoint.X - this.Width / 2);
             float yDif = (paralaxCursorPoint.Y - this.Height / 2);
-            newPoint.X -= xDif + ((depth - 0) * xDif / 4);
-            newPoint.Y -= yDif + ((depth - 0) * yDif / 4);
+            newPoint.X -= xDif + (depth * xDif / 4);
+            newPoint.Y -= yDif + (depth * yDif / 4);
 
             //Move the camera to follow the player, use a bit of paralaxing
             newPoint.X -= (paralaxPoint.X - this.Width / 2) / (depth + 1);
