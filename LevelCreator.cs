@@ -935,9 +935,9 @@ namespace Faces
             XmlNodeList loadAsset = doc.GetElementsByTagName("Level" + currentAsset);
 
             planes.Clear();
+            bool levelHasPlayer = false;
             foreach (XmlNode level in loadAsset)
             {
-                bool levelHasPlayer = false;
                 foreach (XmlNode sb in level.SelectNodes("ScreenBounds"))
                 {
                     screenBounds.Clear();
@@ -1036,17 +1036,18 @@ namespace Faces
                     }
                     planes.Add(plane);
                 }
-                planeDepth = 0;
-                if (planes.Count < 1)
-                {
-                    Plane blankPlane = new Plane();
-                    planes.Add(blankPlane);
-                }
-                if (!levelHasPlayer)
-                {
-                    playerPlaneDepth = planes.Count() - 1;
-                    planes[playerPlaneDepth].physicsObjects.Add(new PhysicsObject(new Rectangle(100, 100, 40, 55), "Player"));
-                }
+
+            }
+            planeDepth = 0;
+            if (planes.Count < 1)
+            {
+                Plane blankPlane = new Plane();
+                planes.Add(blankPlane);
+            }
+            if (!levelHasPlayer)
+            {
+                playerPlaneDepth = planes.Count() - 1;
+                planes[playerPlaneDepth].physicsObjects.Add(new PhysicsObject(new Rectangle(100, 100, 40, 55), "Player"));
             }
         }
 
