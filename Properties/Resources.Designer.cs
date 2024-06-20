@@ -61,8 +61,20 @@ namespace Faces.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt; 
-        ///.
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Assets&gt;
+        ///  &lt;Asset1 FaceCount=&quot;25&quot;&gt;
+        ///    &lt;Face PointCount=&quot;3&quot; xTilt=&quot;442.9295&quot; yTilt=&quot;438.3333&quot; a=&quot;255&quot; r=&quot;204&quot; g=&quot;186&quot; b=&quot;171&quot;&gt;
+        ///      &lt;PointF x=&quot;249&quot; y=&quot;447&quot; /&gt;
+        ///      &lt;PointF x=&quot;571&quot; y=&quot;456&quot; /&gt;
+        ///      &lt;PointF x=&quot;509&quot; y=&quot;415&quot; /&gt;
+        ///    &lt;/Face&gt;
+        ///    &lt;Face PointCount=&quot;3&quot; xTilt=&quot;353.9474&quot; yTilt=&quot;423.6667&quot; a=&quot;255&quot; r=&quot;204&quot; g=&quot;186&quot; b=&quot;171&quot;&gt;
+        ///      &lt;PointF x=&quot;511&quot; y=&quot;414&quot; /&gt;
+        ///      &lt;PointF x=&quot;247&quot; y=&quot;446&quot; /&gt;
+        ///      &lt;PointF x=&quot;305&quot; y=&quot;414&quot; /&gt;
+        ///    &lt;/Face&gt;
+        ///    &lt;Face PointCoun [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Assets {
             get {
@@ -71,8 +83,20 @@ namespace Faces.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt; 
-        ///.
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Levels&gt;
+        ///  &lt;Level1 PlaneCount=&quot;3&quot;&gt;
+        ///    &lt;Face&gt;
+        ///      &lt;Face PointCount=&quot;3&quot; xTilt=&quot;442.9295&quot; yTilt=&quot;438.3333&quot; a=&quot;255&quot; r=&quot;204&quot; g=&quot;186&quot; b=&quot;171&quot;&gt;
+        ///        &lt;PointF x=&quot;249&quot; y=&quot;447&quot; /&gt;
+        ///        &lt;PointF x=&quot;571&quot; y=&quot;456&quot; /&gt;
+        ///        &lt;PointF x=&quot;509&quot; y=&quot;415&quot; /&gt;
+        ///      &lt;/Face&gt;
+        ///      &lt;Face PointCount=&quot;3&quot; xTilt=&quot;353.9474&quot; yTilt=&quot;423.6667&quot; a=&quot;255&quot; r=&quot;204&quot; g=&quot;186&quot; b=&quot;171&quot;&gt;
+        ///        &lt;PointF x=&quot;511&quot; y=&quot;414&quot; /&gt;
+        ///        &lt;PointF x=&quot;247&quot; y=&quot;446&quot; /&gt;
+        ///        &lt;PointF x=&quot;305&quot; y=&quot;414&quot; /&gt;
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Levels {
             get {

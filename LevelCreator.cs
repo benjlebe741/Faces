@@ -143,7 +143,7 @@ namespace Faces
             currentAssetLabel.Text = "" + currentAsset;
             bool assetHasFaces = false;
             XmlDocument doc = new XmlDocument();
-            doc.Load("Assets.xml");
+            doc.Load("Resources/Assets.xml");
             XmlNodeList loadAsset = doc.GetElementsByTagName("Asset" + currentAsset);
 
             foreach (XmlNode n in loadAsset)
@@ -161,7 +161,7 @@ namespace Faces
             currentLevelLabel.Text = "" + currentAsset;
             bool LevelExists = false;
             XmlDocument doc = new XmlDocument();
-            doc.Load("Levels.xml");
+            doc.Load("Resources/Levels.xml");
             XmlNodeList loadAsset = doc.GetElementsByTagName("Level" + currentAsset);
 
             foreach (XmlNode n in loadAsset)
@@ -462,7 +462,7 @@ namespace Faces
         private void loadLabel_Click(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("Assets.xml");
+            doc.Load("Resources/Assets.xml");
 
             //Get the current asset, using a list so that if there is no asset we just have no items to work from in a foreach loop
             XmlNodeList loadAsset = doc.GetElementsByTagName("Asset" + currentAsset);
@@ -785,7 +785,7 @@ namespace Faces
         private void saveLevel_Click(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("Levels.xml");
+            doc.Load("Resources/Levels.xml");
 
             //Remove all levels with the current ID
             XmlNodeList nodes = doc.GetElementsByTagName("Level" + currentAsset);
@@ -915,7 +915,7 @@ namespace Faces
                 newLevel.AppendChild(plane);
             }
             root.AppendChild(newLevel);
-            doc.Save("Levels.xml");
+            doc.Save("Resources/Levels.xml");
 
             checKLevel();
         }
@@ -930,7 +930,7 @@ namespace Faces
             }
 
             XmlDocument doc = new XmlDocument();
-            doc.Load("Levels.xml");
+            doc.Load("Resources/Levels.xml");
 
             //Get the current level, using a list so that if there is no level we just have no items to work from in a foreach loop
             XmlNodeList loadAsset = doc.GetElementsByTagName("Level" + currentAsset);

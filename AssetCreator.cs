@@ -222,7 +222,7 @@ namespace Faces
         private void saveLabel_Click(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("Assets.xml");
+            doc.Load("Resources/Assets.xml");
 
             //Remove all assets with the current ID
             XmlNodeList nodes = doc.GetElementsByTagName("Asset" + currentAsset);
@@ -267,7 +267,7 @@ namespace Faces
 
 
             root.AppendChild(newAsset);
-            doc.Save("Assets.xml");
+            doc.Save("Resources/Assets.xml");
 
             checkAsset();
         }
@@ -278,7 +278,7 @@ namespace Faces
             faces.Clear();
 
             XmlDocument doc = new XmlDocument();
-            doc.Load("Assets.xml");
+            doc.Load("Resources/Assets.xml");
 
             //Get the current asset, using a list so that if there is no asset we just have no items to work from in a foreach loop
             XmlNodeList loadAsset = doc.GetElementsByTagName("Asset" + currentAsset);
@@ -311,7 +311,7 @@ namespace Faces
         {
             bool assetHasFaces = false;
             XmlDocument doc = new XmlDocument();
-            doc.Load("Assets.xml");
+            doc.Load("Resources/Assets.xml");
             XmlNodeList loadAsset = doc.GetElementsByTagName("Asset" + currentAsset);
 
             foreach (XmlNode n in loadAsset)
