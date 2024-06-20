@@ -1,6 +1,6 @@
 ﻿namespace Faces
 {
-    partial class helpTextLabel6
+    partial class AssetCreator
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,16 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.menuLabel = new System.Windows.Forms.Label();
+            this.toggleLightsLabel = new System.Windows.Forms.Label();
             this.nextColor = new System.Windows.Forms.Label();
             this.currentColor = new System.Windows.Forms.Label();
             this.saveLabel = new System.Windows.Forms.Label();
             this.loadLabel = new System.Windows.Forms.Label();
             this.currentAssetLabel = new System.Windows.Forms.Label();
-            this.PolygoneMode = new System.Windows.Forms.Label();
-            this.RectangleMode = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.polygonModeLabel = new System.Windows.Forms.Label();
+            this.rectangleModeLabel = new System.Windows.Forms.Label();
+            this.surfaceLightsLabel = new System.Windows.Forms.Label();
             this.helpTextLabel = new System.Windows.Forms.Label();
             this.helpTextLabel2 = new System.Windows.Forms.Label();
             this.helpTextLabel3 = new System.Windows.Forms.Label();
@@ -56,27 +56,27 @@
             this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // label1
+            // menuLabel
             // 
-            this.label1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(243, 52);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Menu";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.menuLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.menuLabel.Location = new System.Drawing.Point(3, 3);
+            this.menuLabel.Name = "menuLabel";
+            this.menuLabel.Size = new System.Drawing.Size(243, 52);
+            this.menuLabel.TabIndex = 7;
+            this.menuLabel.Text = "Menu";
+            this.menuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.menuLabel.Click += new System.EventHandler(this.label1_Click);
             // 
-            // label2
+            // toggleLightsLabel
             // 
-            this.label2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.label2.Location = new System.Drawing.Point(252, 3);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 52);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Toggle Lights";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            this.toggleLightsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.toggleLightsLabel.Location = new System.Drawing.Point(252, 3);
+            this.toggleLightsLabel.Name = "toggleLightsLabel";
+            this.toggleLightsLabel.Size = new System.Drawing.Size(98, 52);
+            this.toggleLightsLabel.TabIndex = 8;
+            this.toggleLightsLabel.Text = "Toggle Lights";
+            this.toggleLightsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toggleLightsLabel.Click += new System.EventHandler(this.label2_Click);
             // 
             // nextColor
             // 
@@ -136,38 +136,38 @@
             this.currentAssetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.currentAssetLabel.Click += new System.EventHandler(this.currentAssetLabel_Click);
             // 
-            // PolygoneMode
+            // polygonModeLabel
             // 
-            this.PolygoneMode.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.PolygoneMode.Location = new System.Drawing.Point(3, 64);
-            this.PolygoneMode.Name = "PolygoneMode";
-            this.PolygoneMode.Size = new System.Drawing.Size(97, 52);
-            this.PolygoneMode.TabIndex = 15;
-            this.PolygoneMode.Text = "Polygon Mode";
-            this.PolygoneMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.PolygoneMode.Click += new System.EventHandler(this.PolygoneMode_Click);
+            this.polygonModeLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.polygonModeLabel.Location = new System.Drawing.Point(3, 64);
+            this.polygonModeLabel.Name = "polygonModeLabel";
+            this.polygonModeLabel.Size = new System.Drawing.Size(97, 52);
+            this.polygonModeLabel.TabIndex = 15;
+            this.polygonModeLabel.Text = "Polygon Mode";
+            this.polygonModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.polygonModeLabel.Click += new System.EventHandler(this.PolygoneMode_Click);
             // 
-            // RectangleMode
+            // rectangleModeLabel
             // 
-            this.RectangleMode.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.RectangleMode.Location = new System.Drawing.Point(3, 125);
-            this.RectangleMode.Name = "RectangleMode";
-            this.RectangleMode.Size = new System.Drawing.Size(97, 52);
-            this.RectangleMode.TabIndex = 16;
-            this.RectangleMode.Text = "Rectangle Mode";
-            this.RectangleMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.RectangleMode.Click += new System.EventHandler(this.RectangleMode_Click);
+            this.rectangleModeLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.rectangleModeLabel.Location = new System.Drawing.Point(3, 125);
+            this.rectangleModeLabel.Name = "rectangleModeLabel";
+            this.rectangleModeLabel.Size = new System.Drawing.Size(97, 52);
+            this.rectangleModeLabel.TabIndex = 16;
+            this.rectangleModeLabel.Text = "Rectangle Mode";
+            this.rectangleModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rectangleModeLabel.Click += new System.EventHandler(this.RectangleMode_Click);
             // 
-            // label3
+            // surfaceLightsLabel
             // 
-            this.label3.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.label3.Location = new System.Drawing.Point(356, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(106, 52);
-            this.label3.TabIndex = 17;
-            this.label3.Text = "Surface Lights (Frame Drops)";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.surfaceLightsLabel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.surfaceLightsLabel.Location = new System.Drawing.Point(356, 3);
+            this.surfaceLightsLabel.Name = "surfaceLightsLabel";
+            this.surfaceLightsLabel.Size = new System.Drawing.Size(106, 52);
+            this.surfaceLightsLabel.TabIndex = 17;
+            this.surfaceLightsLabel.Text = "Surface Lights (Frame Drops)";
+            this.surfaceLightsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.surfaceLightsLabel.Click += new System.EventHandler(this.label3_Click);
             // 
             // helpTextLabel
             // 
@@ -250,7 +250,7 @@
             this.helpTextLabel8.Text = "Change the color of faces depending on your cursor light + Added lights";
             this.helpTextLabel8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // helpTextLabel6
+            // AssetCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -263,18 +263,18 @@
             this.Controls.Add(this.helpTextLabel3);
             this.Controls.Add(this.helpTextLabel2);
             this.Controls.Add(this.helpTextLabel);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.RectangleMode);
-            this.Controls.Add(this.PolygoneMode);
+            this.Controls.Add(this.surfaceLightsLabel);
+            this.Controls.Add(this.rectangleModeLabel);
+            this.Controls.Add(this.polygonModeLabel);
             this.Controls.Add(this.currentAssetLabel);
             this.Controls.Add(this.loadLabel);
             this.Controls.Add(this.saveLabel);
             this.Controls.Add(this.currentColor);
             this.Controls.Add(this.nextColor);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.toggleLightsLabel);
+            this.Controls.Add(this.menuLabel);
             this.DoubleBuffered = true;
-            this.Name = "helpTextLabel6";
+            this.Name = "AssetCreator";
             this.Size = new System.Drawing.Size(1022, 710);
             this.Load += new System.EventHandler(this.AssetCreator_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.AssetCreator_Paint);
@@ -288,16 +288,16 @@
 
         #endregion
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label menuLabel;
+        private System.Windows.Forms.Label toggleLightsLabel;
         private System.Windows.Forms.Label nextColor;
         private System.Windows.Forms.Label currentColor;
         private System.Windows.Forms.Label saveLabel;
         private System.Windows.Forms.Label loadLabel;
         private System.Windows.Forms.Label currentAssetLabel;
-        private System.Windows.Forms.Label PolygoneMode;
-        private System.Windows.Forms.Label RectangleMode;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label polygonModeLabel;
+        private System.Windows.Forms.Label rectangleModeLabel;
+        private System.Windows.Forms.Label surfaceLightsLabel;
         private System.Windows.Forms.Label helpTextLabel;
         private System.Windows.Forms.Label helpTextLabel2;
         private System.Windows.Forms.Label helpTextLabel3;

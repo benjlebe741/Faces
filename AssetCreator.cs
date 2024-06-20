@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace Faces
 {
-    public partial class helpTextLabel6 : UserControl
+    public partial class AssetCreator : UserControl
     {
         int currentAsset = 0;
         bool lighting = false;
@@ -39,7 +39,7 @@ namespace Faces
         PointF cornerOne = new PointF();
         PointF cornerTwo = new PointF();
 
-        public helpTextLabel6()
+        public AssetCreator()
         {
             InitializeComponent();
             primaryLights.Add(new Light(Color.White, new PointF(0, 0)));
@@ -211,7 +211,7 @@ namespace Faces
 
         void lightingCheck()
         {
-            label2.BackColor = (lighting) ? Color.White : Color.LightGray;
+            toggleLightsLabel.BackColor = (lighting) ? Color.White : Color.LightGray;
         }
 
         private void AssetCreator_Load(object sender, EventArgs e)
@@ -346,14 +346,14 @@ namespace Faces
         {
             if (createMode == "Rectangles")
             {
-                RectangleMode.BackColor = Color.White;
-                PolygoneMode.BackColor = Color.LightGray;
+                rectangleModeLabel.BackColor = Color.White;
+                polygonModeLabel.BackColor = Color.LightGray;
                 helpTextLabel.Text = "Click and drag for rectangle! Space to confirm!\n(Cursor position = lighting direction)";
             }
             else if (createMode == "Polygons")
             {
-                PolygoneMode.BackColor = Color.White;
-                RectangleMode.BackColor = Color.LightGray;
+                polygonModeLabel.BackColor = Color.White;
+                rectangleModeLabel.BackColor = Color.LightGray;
                 helpTextLabel.Text = "Click to add points! Space to confirm!\n(Cursor position = lighting direction)";
             }
         }
@@ -382,7 +382,7 @@ namespace Faces
         private void label3_Click(object sender, EventArgs e)
         {
             surfaceLights = !surfaceLights;
-            label3.BackColor = (surfaceLights) ? Color.White : Color.LightGray;
+            surfaceLightsLabel.BackColor = (surfaceLights) ? Color.White : Color.LightGray;
         }
 
         private void toggleHelpLabel_Click(object sender, EventArgs e)

@@ -22,15 +22,18 @@ namespace Faces
         PointF selectionPointOne = new PointF();
 
         //Points, Assets, Faces
-        string mode = "Not Set";
         int currentAsset = 0;
         List<PointF> points = new List<PointF>();
         PointF cornerOne = new PointF();
         PointF cornerTwo = new PointF();
 
+        //Modes and additiontypes
+        string mode = "Not Set";
+        string additionType = "Not Set";
+
         //Lighting
-        bool lighting = false;
-        bool surfaceLights = true;
+        bool lighting = true;
+        bool surfaceLights = false;
         Color backgroundColor = Color.FromArgb(0, 127, 127, 127);
 
         //Paralaxing
@@ -48,7 +51,6 @@ namespace Faces
         int playerPlaneDepth = 0;
         int planeDepth = 1;
         string regionDepth = "Not Set";
-        string additionType = "Not Set";
         bool outline = true;
 
         //Selections
@@ -57,12 +59,16 @@ namespace Faces
         string selectionOption = "Not Set";
         List<Asset> duplicationList = new List<Asset>();
 
+        //Help Text
+        bool helpText = true;
+
         public LevelCreator()
         {
             InitializeComponent();
             checkAsset();
             checKLevel();
             ModeCheck();
+            checkHelpText();
             paralaxPoint = paralaxCursorPoint = new PointF(this.Width / 2, this.Height / 2);
         }
 
@@ -78,42 +84,58 @@ namespace Faces
 
         private void PolygonMode_Click(object sender, EventArgs e)
         {
-            mode = "PolygonMode";
-            ModeCheck();
+            if (additionType != "ScreenBounds" && additionType != "Not Set")
+            {
+                mode = "PolygonMode";
+                ModeCheck(); fillHelpText();
+            }
         }
 
         private void RectangleMode_Click(object sender, EventArgs e)
         {
-            mode = "RectangleMode";
-            ModeCheck();
+            if (additionType != "Collisions" && additionType != "Not Set")
+            {
+                mode = "RectangleMode";
+                ModeCheck(); fillHelpText();
+            }
         }
 
         private void SelectMode_Click(object sender, EventArgs e)
         {
-            mode = "SelectMode";
-            ModeCheck();
+            if (additionType == "Art")
+            {
+                mode = "SelectMode";
+                ModeCheck(); fillHelpText();
+            }
         }
 
         void ModeCheck()
         {
-            RectangleMode.BackColor = (mode != "RectangleMode") ? Color.LightGray : Color.White;
-            PolygonMode.BackColor = (mode != "PolygonMode") ? Color.LightGray : Color.White;
-            SelectMode.BackColor = (mode != "SelectMode") ? Color.LightGray : Color.White;
-            scaleLabel5.Visible = scaleLabel6.Visible = (mode == "SelectMode");
-            describeThis();
+            rectangleModeLabel.BackColor = (mode != "RectangleMode") ? ((additionType == "Collisions" || additionType == "Not Set") ? Color.SlateGray : Color.LightGray) : Color.White;
+            polygonModeLabel.BackColor = (mode != "PolygonMode") ? ((additionType == "Screen Bounds" || additionType == "Not Set") ? Color.SlateGray : Color.LightGray) : Color.White;
+            selectModeLabel.BackColor = (mode != "SelectMode") ? ((additionType != "Art") ? Color.SlateGray : Color.LightGray) : Color.White;
         }
+        void additionTypeCheck()
+        {
+            artLabel.BackColor = (additionType == "Art") ? Color.White : Color.LightGray;
+            collisionsLabel.BackColor = (additionType == "Collisions") ? Color.White : Color.LightGray;
+            screenBoundsLabel.BackColor = (additionType == "Screen Bounds") ? Color.White : Color.LightGray;
 
+            polygonModeLabel.BackColor = (additionType == "Screen Bounds") ? Color.SlateGray : Color.LightGray;
+            rectangleModeLabel.BackColor = (additionType == "Collisions") ? Color.SlateGray : Color.LightGray;
+            selectModeLabel.BackColor = (additionType != "Art") ? Color.SlateGray : Color.LightGray;
+        }
         private void LightsToggle_Click(object sender, EventArgs e)
         {
             lighting = !lighting;
-            LightsToggle.BackColor = (lighting) ? Color.White : Color.LightGray;
-            SurfaceLightsToggle.BackColor = (lighting) ? (surfaceLights) ? Color.White : Color.LightGray : Color.LightGray;
+            lightsToggleLabel.BackColor = (lighting) ? Color.White : Color.LightGray;
+            surfaceLightsToggleLabel.BackColor = (lighting) ? (surfaceLights) ? Color.White : Color.LightGray : Color.LightGray;
         }
 
         private void SurfaceLightsToggle_Click(object sender, EventArgs e)
         {
             surfaceLights = !surfaceLights;
-            SurfaceLightsToggle.BackColor = (surfaceLights && lighting) ? Color.White : Color.LightGray;
+            surfaceLightsToggleLabel.BackColor = (surfaceLights && lighting) ? Color.White : Color.LightGray;
         }
         void checkAsset()
         {
@@ -246,8 +268,6 @@ namespace Faces
             }
             #endregion
 
-            label1.Text = "" + shiftPressed;
-
             float xTilt = (desiredParalaxPoint.X - paralaxPoint.X) / 2;
             float yTilt = (desiredParalaxPoint.Y - 100 - paralaxPoint.Y) / 2;
             paralaxCursorPoint.X -= (paralaxCursorPoint.X - this.Width / 2 + (xTilt)) / 240;
@@ -261,8 +281,8 @@ namespace Faces
 
             cursorPos = PointToClient(Cursor.Position);
             determineNextColor();
-            currentColor.BackColor = cursorColor;
-            nextColor.BackColor = determineColor;
+            currentColorLabel.BackColor = cursorColor;
+            nextColorLabel.BackColor = determineColor;
             foreach (Plane p in planes)
             {
                 p.tick(surfaceLights);
@@ -295,7 +315,7 @@ namespace Faces
             float percentage = (totalXdifference - cursorPos.X) / totalXdifference;
             percentage = (percentage < 0) ? 0 : percentage;
             percentage = (percentage > 1) ? 1 : percentage;
-            determineColor = Color.FromArgb((int)(percentage * (float)255), (int)(percentage * (float)255), (int)(percentage * (float)255), (int)(percentage * (float)255));
+            determineColor = Color.FromArgb(255, (int)(percentage * (float)255), (int)(percentage * (float)255), (int)(percentage * (float)255));
         }
 
         private void label1_Click_1(object sender, EventArgs e)
@@ -477,8 +497,8 @@ namespace Faces
             //If this face is already on screen, continue
             if (onScreen) { return onScreen; }
             //If not, check to see if this point IS
-            Rectangle screenRect = new Rectangle(0,0,this.Width,this.Height);
-            bool pointIsInsideScreen = screenRect.Contains((int)pointF.X,(int)pointF.Y);
+            Rectangle screenRect = new Rectangle(0, 0, this.Width, this.Height);
+            bool pointIsInsideScreen = screenRect.Contains((int)pointF.X, (int)pointF.Y);
             onScreen = (pointIsInsideScreen) ? true : false;
             return onScreen;
         }
@@ -616,7 +636,7 @@ namespace Faces
                 {
                     for (int p = 0; p < _points.Length; p++)
                     {
-                        _points[p] = paralaxThisPoint(_points[p], posPlaneDepth);
+                        _points[p] = paralaxThisPoint(_points[p], planes.Count - 1 - planeDepth);
                     }
                 }
                 else
@@ -696,40 +716,27 @@ namespace Faces
         private void regionArt_Click(object sender, EventArgs e)
         {
             additionType = "Art";
+            mode = "Not Set";
+            ModeCheck();
             additionTypeCheck();
-        }
-
-        private void regionLights_Click(object sender, EventArgs e)
-        {
-            additionType = "Light";
-            additionTypeCheck();
+            fillHelpText();
         }
 
         private void regionCollisions_Click(object sender, EventArgs e)
         {
             additionType = "Collisions";
+            mode = "PolygonMode";
             additionTypeCheck();
+            ModeCheck();
+            helpTextLabel3.Text = "";
+            helpTextLabel.Text = "Mouse click to add points, space to confirm shape";
         }
 
         void regionDepthCheck()
         {
-            currentPlane.Text = "Current Plane:" + planeDepth;
-            planeCount.Text = "Max Plane:" + (planes.Count - 1);
-            describeThis();
+            currentPlaneLabel.Text = "Current Plane:" + planeDepth;
+            planeCountLabel.Text = "Max Plane:" + (planes.Count - 1);
         }
-        void additionTypeCheck()
-        {
-            regionArt.BackColor = (additionType == "Art") ? Color.White : Color.LightGray;
-            regionCollisions.BackColor = (additionType == "Collisions") ? Color.White : Color.LightGray;
-            label4.BackColor = (additionType == "Screen Bounds") ? Color.White : Color.LightGray;
-            describeThis();
-        }
-
-        void describeThis()
-        {
-            describeCurrent.Text = $"Changing {additionType} in {regionDepth} with {mode}";
-        }
-
         private void LevelCreator_MouseDown(object sender, MouseEventArgs e)
         {
         }
@@ -930,6 +937,7 @@ namespace Faces
             planes.Clear();
             foreach (XmlNode level in loadAsset)
             {
+                bool levelHasPlayer = false;
                 foreach (XmlNode sb in level.SelectNodes("ScreenBounds"))
                 {
                     screenBounds.Clear();
@@ -1022,10 +1030,22 @@ namespace Faces
                         if (id == "Player")
                         {
                             playerPlaneDepth = planes.Count();
+                            levelHasPlayer = true;
                         }
                         plane.physicsObjects.Add(new PhysicsObject(ghostRect, id));
                     }
                     planes.Add(plane);
+                }
+                planeDepth = 0;
+                if (planes.Count < 1)
+                {
+                    Plane blankPlane = new Plane();
+                    planes.Add(blankPlane);
+                }
+                if (!levelHasPlayer)
+                {
+                    playerPlaneDepth = planes.Count() - 1;
+                    planes[playerPlaneDepth].physicsObjects.Add(new PhysicsObject(new Rectangle(100, 100, 40, 55), "Player"));
                 }
             }
         }
@@ -1033,7 +1053,7 @@ namespace Faces
         private void label2_Click(object sender, EventArgs e)
         {
             paralax = !paralax;
-            label2.BackColor = (paralax) ? Color.White : Color.LightGray;
+            paralaxLabel.BackColor = (paralax) ? Color.White : Color.LightGray;
         }
 
         private void LevelCreator_Load(object sender, EventArgs e)
@@ -1044,7 +1064,7 @@ namespace Faces
         private void outlineLable_Click(object sender, EventArgs e)
         {
             outline = !outline;
-            outlineLable.BackColor = (outline) ? Color.White : Color.LightGray;
+            outlineLabel.BackColor = (outline) ? Color.White : Color.LightGray;
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -1123,7 +1143,10 @@ namespace Faces
         private void label4_Click(object sender, EventArgs e)
         {
             additionType = "Screen Bounds";
+            mode = "RectangleMode";
             additionTypeCheck();
+            ModeCheck();
+            helpTextLabel.Text = "Mouse Right and Mouse Left to set the corners of the screen bounds.\nSpace to confirm"; helpTextLabel3.Text = "";
         }
 
         PointF paralaxThisPoint(PointF initialPoint, float depth)
@@ -1141,6 +1164,58 @@ namespace Faces
             newPoint.Y -= (paralaxPoint.Y - this.Height / 2) / (depth + 1);
 
             return newPoint;
+        }
+
+        private void toggleHelpLabel_Click(object sender, EventArgs e)
+        {
+            helpText = !helpText;
+            checkHelpText();
+        }
+        void checkHelpText()
+        {
+            toggleHelpLabel.BackColor = (helpText) ? Color.White : Color.LightGray;
+            helpTextLabel.Visible = helpTextLabel2.Visible = helpTextLabel3.Visible = helpTextLabel4.Visible = helpTextLabel5.Visible = helpTextLabel7.Visible = helpTextLabel8.Visible = helpTextLabel9.Visible = helpTextLabel10.Visible = helpTextLabel11.Visible = helpTextLabel12.Visible = helpTextLabel13.Visible = helpTextLabel14.Visible = (helpText);
+        }
+
+        void fillHelpText()
+        {
+            if (additionType == "Art")
+            {
+                if (mode == "Not Set")
+                {
+                    helpTextLabel.Text = "Click on 'Polygon'- 'Rectangle'- or 'Select' Mode, to add custom shapes, rectangles, or to select and edit assets";
+                    helpTextLabel3.Text = "";
+                }
+                if (mode == "PolygonMode")
+                {
+                    helpTextLabel.Text = "Click to add points! Space to confirm!\n(Cursor position = lighting direction)";
+                    helpTextLabel3.Text = "";
+                }
+                if (mode == "RectangleMode")
+                {
+                    helpTextLabel.Text = "Left and Right mouse click to set corners of rectangle. Space to confirm!\n(Cursor position = lighting direction)";
+                    helpTextLabel3.Text = "";
+                }
+                if (mode == "SelectMode")
+                {
+                    helpTextLabel.Text = "Click on any POINT in any asset in your current levels current plane to select it.\nEscape - Deselect All";
+                    helpTextLabel3.Text = "V - Scale | specialV - nonUniform | F - Rotate | specialF - 90 degree | M - Move | C - Recolor\nspecialC - Copy | shift + C - Paste | (hold shift - inverse operation) | (ctrl - toggle 'Special' mode)   | Delete key - remove";
+
+                }
+            }
+        }
+
+        private void setPlayerPlaneLabel_Click(object sender, EventArgs e)
+        {
+            if (planes[playerPlaneDepth].physicsObjects.Count > 0)
+            {
+                PhysicsObject _player = planes[playerPlaneDepth].physicsObjects[0];
+                planes[playerPlaneDepth].physicsObjects.RemoveAt(0);
+
+                playerPlaneDepth = planeDepth;
+
+                planes[playerPlaneDepth].physicsObjects.Add(_player);
+            }
         }
     }
 }
