@@ -47,9 +47,9 @@ namespace Faces
         List<RectangleF> screenBounds = new List<RectangleF>();
 
         //Planes
-        List<Plane> planes = new List<Plane> { new Plane(), new Plane(), new Plane() };
+        List<Plane> planes = new List<Plane> { new Plane()};
         int playerPlaneDepth = 0;
-        int planeDepth = 1;
+        int planeDepth = 0;
         string regionDepth = "Not Set";
         bool outline = true;
 
@@ -70,6 +70,7 @@ namespace Faces
             ModeCheck();
             checkHelpText();
             paralaxPoint = paralaxCursorPoint = new PointF(this.Width / 2, this.Height / 2);
+            planes[playerPlaneDepth].physicsObjects.Add(new PhysicsObject(new Rectangle(100, 100, 40, 55), "Player"));
         }
 
         private void button1_Click(object sender, EventArgs e)
